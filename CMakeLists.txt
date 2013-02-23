@@ -11,7 +11,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 #find_package(Eigen3 REQUIRED)
 #include_directories(${EIGEN3_INCLUDE_DIR})
 
-add_executable(quantemul main.cpp test/test.cpp)
+add_executable(quantemul hilbertspace.cpp main.cpp test/test.cpp test/hilbertspacetest.cpp)
 add_subdirectory(test)
 target_link_libraries(quantemul gtest gtest_main)
 
