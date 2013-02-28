@@ -42,9 +42,13 @@ public:
 private:
     MatrixXcd _density;
     HilbertSpace _space;
+    VectorXd _eigenValues;
+    MatrixXcd _eigenVectors;
     void CheckMatrixIsSquare(MatrixXcd matr);
-    void CheckMatrixIsDensityMatrix(MatrixXcd matr);
+    bool CheckMatrixIsSelfAdjoined(MatrixXcd matr);
     void CheckSpaceDimension(MatrixXcd matr, HilbertSpace space);
+    void CalculateEigenValuesAndVectors(MatrixXcd matr);
+    void CheckMatrixIsDensityMatrix(MatrixXcd matr);
 };
 
 #endif // QUANTUMSTATE_H
