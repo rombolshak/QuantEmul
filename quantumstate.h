@@ -31,15 +31,37 @@
 
 using namespace Eigen;
 
+/**
+ * Class representing quantum state that can be described with density matrix and space
+ */
 class QuantumState
 {
 public:
+    /**
+     * Constructs an instance of quantum state
+     * @param matr Density matrix of the state OR state vector (can be denormalized). Density matrix is self-adjoint (or Hermitian), positive semi-definite, of trace one
+     * @param space Hilbert space in which state exists
+     */
     QuantumState(MatrixXcd matr, HilbertSpace space);
-    //QuantumState(VectorXd vec);
     
+    /**
+     * Returns density matrix of current state
+     */
     MatrixXcd densityMatrix();
+    
+    /**
+     * Returns eigen values in vector of *real* numbers. Size of vector equals to the density matrix size
+     */
     VectorXd eigenValues();
+    
+    /**
+     * Returns matrix with eigen vectors as columns
+     */
     MatrixXcd eigenVectors();
+    
+    /**
+     * Show whether current state is pure or mixed
+     */
     bool isPure();
     
 private:
@@ -47,6 +69,7 @@ private:
     HilbertSpace _space;
     VectorXd _eigenValues;
     MatrixXcd _eigenVectors;
+    
     void CheckMatrixIsSquare(MatrixXcd matr);
     bool CheckMatrixIsSelfAdjoined(MatrixXcd matr);
     void CheckSpaceDimension(MatrixXcd matr, HilbertSpace space);

@@ -27,8 +27,6 @@
 #include "quantumstate.h"
 #include <stdexcept>
 
-#include <iostream>
-
 QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
 {
     if (matr.cols() == 1) {// state represented by vector, need to construct matrix	
@@ -53,6 +51,7 @@ void QuantumState::CalculateEigenValuesAndVectors(MatrixXcd matr) {
     SelfAdjointEigenSolver<MatrixXcd> solver(matr);
     if (solver.info() != Eigen::Success)
 	throw std::runtime_error("Something is wrong with eigen solver");
+    
     _eigenValues = solver.eigenvalues();
     _eigenVectors = solver.eigenvectors();
 }
@@ -68,7 +67,7 @@ bool QuantumState::CheckMatrixIsSelfAdjoined(MatrixXcd matr) {
 
 void QuantumState::CheckMatrixIsDensityMatrix(MatrixXcd matr) {
     for (int i = 0; i < _eigenValues.rows(); ++i)
-	if (abs(_eigenValues[i]) > 1.0e-15) // if is somehow far from zero
+	if (abs(_eigenValues[i]) > 1.0e-15) // if far from zero
 	    if (_eigenValues[i] < 0) // we dont like negative values
 		throw std::invalid_argument("This is not density matrix because it contains negative eigen values: ");
     
@@ -85,18 +84,15 @@ MatrixXcd QuantumState::densityMatrix() {
     return _density;
 }
 
-VectorXd QuantumState::eigenValues()
-{
+VectorXd QuantumState::eigenValues() {
     return _eigenValues;
 }
 
-MatrixXcd QuantumState::eigenVectors()
-{
+MatrixXcd QuantumState::eigenVectors() {
     return _eigenVectors;
 }
 
-bool QuantumState::isPure()
-{
+bool QuantumState::isPure() {
     MatrixXcd square = _density * _density;
     return abs(square.trace() - std::complex< double >(1, 0)) < 1.0e-15;
 }
