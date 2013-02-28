@@ -85,3 +85,19 @@ MatrixXcd QuantumState::densityMatrix() {
     return _density;
 }
 
+VectorXd QuantumState::eigenValues()
+{
+    return _eigenValues;
+}
+
+MatrixXcd QuantumState::eigenVectors()
+{
+    return _eigenVectors;
+}
+
+bool QuantumState::isPure()
+{
+    MatrixXcd square = _density * _density;
+    return abs(square.trace() - std::complex< double >(1, 0)) < 1.0e-15;
+}
+

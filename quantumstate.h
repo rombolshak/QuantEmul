@@ -38,6 +38,9 @@ public:
     //QuantumState(VectorXd vec);
     
     MatrixXcd densityMatrix();
+    VectorXd eigenValues();
+    MatrixXcd eigenVectors();
+    bool isPure();
     
 private:
     MatrixXcd _density;
