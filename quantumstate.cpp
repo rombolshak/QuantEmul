@@ -31,8 +31,10 @@
 
 QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
 {
-    if (matr.cols() == 1) // state represented by vector, need to construct matrix	
+    if (matr.cols() == 1) {// state represented by vector, need to construct matrix	
+	matr.normalize();
 	_density = matr * matr.transpose();
+    }
     else {
 	CheckMatrixIsSquare(matr);
 	_density = matr;
@@ -40,7 +42,7 @@ QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
     
     CalculateEigenValuesAndVectors(_density);
     CheckMatrixIsDensityMatrix(_density);
-    CheckSpaceDimension(matr, space);
+    CheckSpaceDimension(_density, space);
     _space = space;
 }
 
@@ -66,8 +68,9 @@ bool QuantumState::CheckMatrixIsSelfAdjoined(MatrixXcd matr) {
 
 void QuantumState::CheckMatrixIsDensityMatrix(MatrixXcd matr) {
     for (int i = 0; i < _eigenValues.rows(); ++i)
-	if (_eigenValues[i] < 0)
-	    throw std::invalid_argument("This is not density matrix because it contains negative eigen values: ");
+	if (abs(_eigenValues[i]) > 1.0e-15) // if is somehow far from zero
+	    if (_eigenValues[i] < 0) // we dont like negative values
+		throw std::invalid_argument("This is not density matrix because it contains negative eigen values: ");
     
     if (abs(matr.trace() - std::complex< double >(1, 0)) > 1.0e-15)
 	throw std::invalid_argument("Matrix should have trace equal to 1");

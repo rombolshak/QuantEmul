@@ -15,14 +15,14 @@ TEST(QuantumStateTest, TestConstructWithMatrix) {
 }
 
 TEST(QuantumStateTest, TestConstructWithVector) {
-    Vector4cd vecCol(1/sqrt(2), 0, 0, 1/sqrt(2));
-    Matrix<std::complex< double >, 1, 4> vecRow(1/sqrt(2), 0, 0, 1/sqrt(2));
+    Vector4cd vecCol(1, 1, 0, 1); vecCol.normalize();
+    Matrix<std::complex< double >, 1, 4> vecRow(1, 1, 0, 1); vecRow.normalize();
     Matrix4cd res = vecCol * vecRow;
         
     HilbertSpace space(4);
     QuantumState state(vecCol, space);
     
-    EXPECT_EQ(res, state.densityMatrix());
+    EXPECT_EQ(true, res.isApprox(state.densityMatrix()));
 }
 
 TEST(QuantumStateTest, TestConstructWithNonSquareMatrixIsDisallowed) {
@@ -63,4 +63,11 @@ TEST(QuantumStateTest, TestConstructWithMatrixThatHasNonUnitaryTrace) {
     HilbertSpace space(2);
     
     EXPECT_ANY_THROW(QuantumState state(matr, space));
+}
+
+TEST(QuantumStateTest, TestAutonormalizeVector) {
+    Vector4cd vec(1,0,0,1);
+    HilbertSpace space(4);
+    
+    QuantumState(vec, space);
 }
