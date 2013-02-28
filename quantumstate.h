@@ -27,21 +27,24 @@
 #ifndef QUANTUMSTATE_H
 #define QUANTUMSTATE_H
 #include "Eigen/Dense"
+#include "hilbertspace.h"
 
 using namespace Eigen;
 
 class QuantumState
 {
 public:
-    QuantumState(MatrixXcd matr);
+    QuantumState(MatrixXcd matr, HilbertSpace space);
     //QuantumState(VectorXd vec);
     
     MatrixXcd densityMatrix();
     
 private:
     MatrixXcd _density;
+    HilbertSpace _space;
     void CheckMatrixIsSquare(MatrixXcd matr);
     void CheckMatrixIsDensityMatrix(MatrixXcd matr);
+    void CheckSpaceDimension(MatrixXcd matr, HilbertSpace space);
 };
 
 #endif // QUANTUMSTATE_H

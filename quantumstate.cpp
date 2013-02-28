@@ -27,7 +27,7 @@
 #include "quantumstate.h"
 #include <stdexcept>
 
-QuantumState::QuantumState(MatrixXcd matr)
+QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
 {
     if (matr.cols() == 1) // state represented by vector, need to construct matrix	
 	_density = matr * matr.transpose();
@@ -36,6 +36,9 @@ QuantumState::QuantumState(MatrixXcd matr)
 	CheckMatrixIsDensityMatrix(matr);
 	_density = matr;
     }
+    
+    CheckSpaceDimension(matr, space);
+    _space = space;
 }
 
 void QuantumState::CheckMatrixIsSquare(MatrixXcd matr)
@@ -49,6 +52,13 @@ void QuantumState::CheckMatrixIsDensityMatrix(MatrixXcd matr)
     if (matr != matr.adjoint())
 	throw std::invalid_argument("Matrix should be hermit");
 }
+
+void QuantumState::CheckSpaceDimension(MatrixXcd matr, HilbertSpace space)
+{
+    if (space.totalDimension() != matr.rows())
+	throw std::invalid_argument("Space total dimension shold be the same as matrix is");
+}
+
 
 MatrixXcd QuantumState::densityMatrix()
 {
