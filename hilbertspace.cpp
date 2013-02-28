@@ -29,11 +29,19 @@
 
 using namespace std;
 
+HilbertSpace::HilbertSpace()
+{
+    _rank = 0;
+    _dim = 0;
+}
+
+
 HilbertSpace::HilbertSpace(uint dim)
 {
     if (dim == 0) throw invalid_argument("Dimension cannot be zero");
     _rank = 1;
     _dimensions.push_back(dim);
+    _dim = dim;
 }
 
 
@@ -43,6 +51,7 @@ HilbertSpace::HilbertSpace(std::vector< uint > dimensions)
     for (int i = 0; i < _rank; ++i)
 	if (dimensions[i] == 0)
 	    throw invalid_argument("Dimension cannot be zero");
+	else _dim += dimensions[i];
     _dimensions = dimensions;
 }
 
@@ -58,6 +67,12 @@ int HilbertSpace::dimension(int index)
     if (index >= _rank) throw out_of_range("This space is less than you think. There is no dimension with such big index, sorry");
     return _dimensions[index];
 }
+
+int HilbertSpace::totalDimension()
+{
+    return _dim;
+}
+
 
 void HilbertSpace::tensorWith(HilbertSpace second)
 {

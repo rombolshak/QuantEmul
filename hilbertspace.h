@@ -38,6 +38,11 @@ class HilbertSpace
 public:
     
     /**
+     * Construct an empty Hilbert space that can not be used in any operations
+     */
+    HilbertSpace();
+    
+    /**
      * Construct a single Hilbert space with specified dimension
      * @param dim Dimension of Hilbert space, must be strongly positive
      */
@@ -61,13 +66,18 @@ public:
     int dimension(int index);
     
     /**
+     * Returns sum of all subspace dimensions
+     */
+    int totalDimension();
+    
+    /**
      * Do a tensor product with specified space
      * @param second Hilbert space that will be added to current space
      */
     void tensorWith(HilbertSpace second);
 
 private:
-    int _rank;
+    int _rank, _dim;
     std::vector< uint > _dimensions;
 
 };

@@ -17,6 +17,11 @@ protected:
     vector<uint> dims;
 };
 
+TEST_F(HilbertSpaceTest, CreateEmptyDimension) {
+    HilbertSpace space;
+    EXPECT_EQ(0, space.totalDimension());
+}
+
 TEST_F(HilbertSpaceTest, CreateSpaceWithZeroDimensionSize) {
     try {
 	HilbertSpace space(0);
@@ -63,6 +68,11 @@ TEST_F(HilbertSpaceTest, CheckTensorProduct) {
     EXPECT_EQ(5, space.rank());
     EXPECT_EQ(1, space.dimension(2));
     EXPECT_EQ(78, space.dimension(space.rank() - 1));
+}
+
+TEST_F(HilbertSpaceTest, CheckTotalDimension) {
+    HilbertSpace space(dims);    
+    EXPECT_EQ(7, space.totalDimension());
 }
 
 }
