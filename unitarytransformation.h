@@ -27,8 +27,22 @@
 #ifndef UNITARYTRANSFORMATION_H
 #define UNITARYTRANSFORMATION_H
 
+#include "Eigen/Dense"
+
+using namespace Eigen;
+
 class UnitaryTransformation
 {
+public:
+    UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis);
+    
+    MatrixXcd transformMatrix();
+    
+protected:
+    MatrixXcd _matrix;
+private:
+    void _checkMatricesAreSquare(MatrixXcd oldBasis, MatrixXcd newBasis);
+    void _checkMatricesHaveTheSameSize(MatrixXcd oldBasis, MatrixXcd newBasis);
 };
 
 #endif // UNITARYTRANSFORMATION_H
