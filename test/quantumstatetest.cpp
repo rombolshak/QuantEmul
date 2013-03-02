@@ -82,8 +82,8 @@ TEST(QuantumStateTest, TestEigenDecomposition) {
     Vector2cd vec1(-1, 1); vec1.normalize();
     Vector2cd vec2(1, 1); vec2.normalize();
     Matrix2cd vectors; // will contain eigen vectors vec1 and vec2 as columns
-    vectors.block<1,2>(0,0) = vec1.transpose();
-    vectors.block<1,2>(1,0) = vec2.transpose();
+    vectors.col(0) = vec1;
+    vectors.col(1) = vec2;
     
     EXPECT_EQ(true, values.isApprox(state.eigenValues()));
     EXPECT_EQ(true, vectors.isApprox(state.eigenVectors()));
