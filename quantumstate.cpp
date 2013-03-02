@@ -34,18 +34,18 @@ QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
 	_density = matr * matr.transpose();
     }
     else {
-	CheckMatrixIsSquare(matr);
+	_checkMatrixIsSquare(matr);
 	_density = matr;
     }
     
-    CalculateEigenValuesAndVectors(_density);
-    CheckMatrixIsDensityMatrix(_density);
-    CheckSpaceDimension(_density, space);
+    _calculateEigenValuesAndVectors(_density);
+    _checkMatrixIsDensityMatrix(_density);
+    _checkSpaceDimension(_density, space);
     _space = space;
 }
 
-void QuantumState::CalculateEigenValuesAndVectors(MatrixXcd matr) {
-    if (!CheckMatrixIsSelfAdjoined(matr))
+void QuantumState::_calculateEigenValuesAndVectors(MatrixXcd matr) {
+    if (!_checkMatrixIsSelfAdjoined(matr))
 	throw std::invalid_argument("Matrix should be selfadjoined");
     
     SelfAdjointEigenSolver<MatrixXcd> solver(matr);
@@ -56,16 +56,16 @@ void QuantumState::CalculateEigenValuesAndVectors(MatrixXcd matr) {
     _eigenVectors = solver.eigenvectors();
 }
 
-void QuantumState::CheckMatrixIsSquare(MatrixXcd matr) {
+void QuantumState::_checkMatrixIsSquare(MatrixXcd matr) {
     if (matr.cols() != matr.rows())
 	throw std::invalid_argument("Matrix should be square, and your matrix is not. Be careful");
 }
 
-bool QuantumState::CheckMatrixIsSelfAdjoined(MatrixXcd matr) {
+bool QuantumState::_checkMatrixIsSelfAdjoined(MatrixXcd matr) {
     return (matr == matr.adjoint());
 }
 
-void QuantumState::CheckMatrixIsDensityMatrix(MatrixXcd matr) {
+void QuantumState::_checkMatrixIsDensityMatrix(MatrixXcd matr) {
     for (int i = 0; i < _eigenValues.rows(); ++i)
 	if (abs(_eigenValues[i]) > 1.0e-15) // if far from zero
 	    if (_eigenValues[i] < 0) // we dont like negative values
@@ -75,7 +75,7 @@ void QuantumState::CheckMatrixIsDensityMatrix(MatrixXcd matr) {
 	throw std::invalid_argument("Matrix should have trace equal to 1");
 }
 
-void QuantumState::CheckSpaceDimension(MatrixXcd matr, HilbertSpace space) {
+void QuantumState::_checkSpaceDimension(MatrixXcd matr, HilbertSpace space) {
     if (space.totalDimension() != matr.rows())
 	throw std::invalid_argument("Space total dimension shold be the same as matrix is");
 }

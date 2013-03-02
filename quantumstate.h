@@ -70,11 +70,11 @@ private:
     VectorXd _eigenValues;
     MatrixXcd _eigenVectors;
     
-    void CheckMatrixIsSquare(MatrixXcd matr);
-    bool CheckMatrixIsSelfAdjoined(MatrixXcd matr);
-    void CheckSpaceDimension(MatrixXcd matr, HilbertSpace space);
-    void CalculateEigenValuesAndVectors(MatrixXcd matr);
-    void CheckMatrixIsDensityMatrix(MatrixXcd matr);
+    void _checkMatrixIsSquare(MatrixXcd matr);
+    bool _checkMatrixIsSelfAdjoined(MatrixXcd matr);
+    void _checkSpaceDimension(MatrixXcd matr, HilbertSpace space);
+    void _calculateEigenValuesAndVectors(MatrixXcd matr);
+    void _checkMatrixIsDensityMatrix(MatrixXcd matr);
 };
 
 #endif // QUANTUMSTATE_H
