@@ -48,10 +48,11 @@ HilbertSpace::HilbertSpace(uint dim)
 HilbertSpace::HilbertSpace(std::vector< uint > dimensions) 
 {
     _rank = dimensions.size();
+    _dim = 1; // need to prevent multiply with default value
     for (int i = 0; i < _rank; ++i)
 	if (dimensions[i] == 0)
 	    throw invalid_argument("Dimension cannot be zero");
-	else _dim += dimensions[i];
+	else _dim *= dimensions[i];
     _dimensions = dimensions;
 }
 
@@ -79,6 +80,7 @@ void HilbertSpace::tensorWith(HilbertSpace second)
     _rank += second._rank;
     for (int i = 0; i < second._rank; ++i)
 	_dimensions.push_back(second._dimensions[i]);
+    _dim *= second.totalDimension();
 }
 
 

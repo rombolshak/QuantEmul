@@ -72,7 +72,10 @@ TEST_F(HilbertSpaceTest, CheckTensorProduct) {
 
 TEST_F(HilbertSpaceTest, CheckTotalDimension) {
     HilbertSpace space(dims);    
-    EXPECT_EQ(7, space.totalDimension());
+    EXPECT_EQ(12, space.totalDimension());
+    
+    space.tensorWith(HilbertSpace(5));
+    EXPECT_EQ(60, space.totalDimension());
 }
 
 }
