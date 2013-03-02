@@ -75,7 +75,7 @@ int HilbertSpace::totalDimension()
 }
 
 
-void HilbertSpace::tensorWith(HilbertSpace second)
+void HilbertSpace::tensorWith(const HilbertSpace& second)
 {
     _rank += second._rank;
     for (int i = 0; i < second._rank; ++i)
