@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -29,7 +29,9 @@
 
 #include <../../unitarytransformation.h>
 
-
+/**
+ * Represents gate that leave |0> unchanged and map |1> to e^(i*teta)|1>
+ */
 class PhaseShiftGate : public UnitaryTransformation
 {
 public:

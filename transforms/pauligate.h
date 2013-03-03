@@ -29,7 +29,9 @@
 
 #include <../../unitarytransformation.h>
 
-
+/**
+ * Represents three Pauli gates. Pauli-X is NOT gate. Pauli-Y and Pauli-Z are rotations around Y and Z axis respectively
+ */
 class PauliGate : public UnitaryTransformation
 {
 public:

@@ -33,17 +33,47 @@
 
 using namespace Eigen;
 
+/**
+ * General class for unirary transformations
+ */
 class UnitaryTransformation
 {
 public:
+    /**
+     * Construct new transform by the pair of basises
+     * @param oldBasis Basis in the current state
+     * @param newBasis Basis after transform
+     * @param space Hilbert space in which transform can be applied
+     */
     UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space);
+    
+    /**
+     * Construct new transform by the unirary matrix
+     * @param matrix Unitary matrix of transform
+     * @param space Hilbert space in which transform can be applied
+     */
     UnitaryTransformation(MatrixXcd matrix, HilbertSpace space);
     
+    /**
+     * Returns unirary matrix of the transform
+     */
     MatrixXcd transformMatrix();
+    
+    /**
+     * Returns space in which transform can be applied
+     */
     HilbertSpace space();
+    
+    /**
+     * Apply current transform to the specified state. State will be changed according to transform matrix
+     * Returns the same state in order to do the chain transform ABCs: A.applyTo(B.applyTo(C.applyTo(s)));
+     */
     QuantumState* applyTo(QuantumState* state);
     
 protected:
+    /**
+     * Empty constructor. Assume to be called only in derived class and derived class MUST set _matrix and _space variables
+     */
     UnitaryTransformation();
     MatrixXcd _matrix;
     HilbertSpace _space;

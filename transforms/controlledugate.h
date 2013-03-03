@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -29,16 +29,25 @@
 
 #include <../../unitarytransformation.h>
 
-
+/**
+ * Class representing Controlled U gate. This is 2 qubit transform. When the first is equal to 1, apply transform U to the second
+ */
 class ControlledUGate : public UnitaryTransformation
 {
 public:
+    /**
+     * Construct controlled transform
+     * @param transform 1-cubit transformation. Be sure to provide unitary matrix
+     */
     ControlledUGate(Matrix2cd transform) {init(transform);}
 protected:
     ControlledUGate(){}
     void init(Matrix2cd transform);
 };
 
+/**
+ * Class representing the CNOT gate: apply NOT the the second qubit if the first equal to 1
+ */
 class CNOTGate : public ControlledUGate
 {
 public:

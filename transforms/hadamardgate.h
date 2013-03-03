@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -28,6 +28,9 @@
 #define HADAMARDGATE_H
 #include "../unitarytransformation.h"
 
+/**
+ * Represents the Hadamard gate: transform |0> to |0> + |1> and |1> to |0> - |1>
+ */
 class HadamardGate : public UnitaryTransformation
 {
 public:

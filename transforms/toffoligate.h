@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -29,7 +29,9 @@
 
 #include <../../unitarytransformation.h>
 
-
+/**
+ * If the first two bits are in the state |1>, it applies a Pauli-X on the third bit, else it does nothing
+ */
 class ToffoliGate : public UnitaryTransformation
 {
 
