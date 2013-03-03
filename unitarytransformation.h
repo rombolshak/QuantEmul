@@ -40,7 +40,7 @@ public:
     UnitaryTransformation(MatrixXcd matrix, HilbertSpace space);
     
     MatrixXcd transformMatrix();
-    void applyTo(QuantumState* state);
+    QuantumState* applyTo(QuantumState* state);
     
 protected:
     MatrixXcd _matrix;

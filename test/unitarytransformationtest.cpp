@@ -89,5 +89,21 @@ TEST(UnitaryTransformationTest, TestApplyingAdamarTransform) {
     UnitaryTransformation ut(transformMatr, space);
     
     ut.applyTo(&state);
+    
     EXPECT_EQ(true, state.densityMatrix().isApprox(resMatr));
+}
+
+TEST(UnitaryTransformationTest, TestApplyingWithDifferentStateAndTransformSpaceDimensions) {
+    MatrixXcd transformMatr(4,4), stateMatr(4,4);    
+    transformMatr.setIdentity();
+    stateMatr.setConstant(0);
+    stateMatr(0,0) = stateMatr(0,3) = stateMatr(3,0) = stateMatr(3,3) = 0.5;
+    
+    std::vector<uint> dims; dims.push_back(2); dims.push_back(2);;
+    HilbertSpace space4(4);
+    HilbertSpace space2x2(dims);
+    QuantumState state(stateMatr, space4);
+    UnitaryTransformation ut(transformMatr, space2x2);
+    
+    EXPECT_ANY_THROW(ut.applyTo(&state));
 }

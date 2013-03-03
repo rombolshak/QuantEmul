@@ -88,11 +88,13 @@ void UnitaryTransformation::_checkSpace()
     if (_space.totalDimension() != _matrix.cols())
 	throw std::invalid_argument("Incorrect space was passed to the transformation");
 }
-#include <iostream>
-void UnitaryTransformation::applyTo(QuantumState* state)
+
+QuantumState* UnitaryTransformation::applyTo(QuantumState* state)
 {
-    //std::cout << _matrix << std::endl << state->densityMatrix() << std::endl;
+    if (_space != state->space())
+	throw std::invalid_argument("Space of state must be the same as transforms space");
     state->setMatrix(_matrix * state->densityMatrix() * _matrix.adjoint());
+    return state;
 }
 
 
