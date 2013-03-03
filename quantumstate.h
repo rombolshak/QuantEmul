@@ -64,6 +64,13 @@ public:
      */
     bool isPure();
     
+    /**
+     * Sets a new density matrix. Matrix should be square, self-adjoint, positive semi-definite, of trace one. Use it wisely.
+     * Note: this function assumes to be called by unitary transform or measurement.
+     * Do not use it to simply replace current state with another one
+     */
+    void setMatrix(MatrixXcd matr);
+    
 private:
     MatrixXcd _density;
     HilbertSpace _space;
@@ -75,6 +82,7 @@ private:
     void _checkSpaceDimension(MatrixXcd matr, HilbertSpace space);
     void _calculateEigenValuesAndVectors(MatrixXcd matr);
     void _checkMatrixIsDensityMatrix(MatrixXcd matr);
+        
 };
 
 #endif // QUANTUMSTATE_H

@@ -62,7 +62,7 @@ void QuantumState::_checkMatrixIsSquare(MatrixXcd matr) {
 }
 
 bool QuantumState::_checkMatrixIsSelfAdjoined(MatrixXcd matr) {
-    return (matr == matr.adjoint());
+    return (matr.isApprox(matr.adjoint()));
 }
 
 void QuantumState::_checkMatrixIsDensityMatrix(MatrixXcd matr) {
@@ -97,3 +97,10 @@ bool QuantumState::isPure() {
     return abs(square.trace() - std::complex< double >(1, 0)) < 1.0e-15;
 }
 
+void QuantumState::setMatrix(MatrixXcd matr) {
+    _checkMatrixIsSquare(matr);
+    _checkSpaceDimension(matr, _space);
+    _calculateEigenValuesAndVectors(matr);
+    _checkMatrixIsDensityMatrix(matr);
+    _density = matr;
+}

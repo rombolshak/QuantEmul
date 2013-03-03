@@ -28,7 +28,7 @@
 #include "Eigen/LU"
 #include <stdexcept>
 
-UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis)
+UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space)
 {
     _checkMatricesAreSquare(oldBasis, newBasis);
     _checkMatricesHaveTheSameSize(oldBasis, newBasis);
@@ -38,6 +38,8 @@ UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBa
 	newBasis.col(i).normalize();
     }
     _matrix = oldBasis.inverse() * newBasis;
+    _space = space;
+    _continueConstruct();
 }
 
 void UnitaryTransformation::_checkMatricesAreSquare(MatrixXcd oldBasis, MatrixXcd newBasis)
@@ -53,6 +55,46 @@ void UnitaryTransformation::_checkMatricesHaveTheSameSize(MatrixXcd oldBasis, Ma
     if (oldBasis.cols() != newBasis.cols())
 	throw std::invalid_argument("Matrices of basises must be the same size. How do you imagine transform from space dimension 6 to space dimension 42, for example?");
 }
+
+UnitaryTransformation::UnitaryTransformation(MatrixXcd matrix, HilbertSpace space)
+{
+    _checkMatrixIsSquare(matrix);
+    _checkMatrixIsUnitary(matrix);
+    _matrix = matrix;
+    _space = space;
+    _continueConstruct();
+}
+
+void UnitaryTransformation::_checkMatrixIsSquare(MatrixXcd matr)
+{
+    if (matr.cols() != matr.rows())
+	throw std::invalid_argument("Matrix of transformation must be square");
+}
+
+void UnitaryTransformation::_checkMatrixIsUnitary(MatrixXcd matrix)
+{
+    MatrixXcd I = matrix; I.setIdentity();
+    if (!I.isApprox(matrix * matrix.adjoint()))
+	throw std::invalid_argument("Your matrix must be unitary (U* * U = I)");
+}
+
+void UnitaryTransformation::_continueConstruct()
+{
+    _checkSpace();
+}
+
+void UnitaryTransformation::_checkSpace()
+{
+    if (_space.totalDimension() != _matrix.cols())
+	throw std::invalid_argument("Incorrect space was passed to the transformation");
+}
+#include <iostream>
+void UnitaryTransformation::applyTo(QuantumState* state)
+{
+    //std::cout << _matrix << std::endl << state->densityMatrix() << std::endl;
+    state->setMatrix(_matrix * state->densityMatrix() * _matrix.adjoint());
+}
+
 
 MatrixXcd UnitaryTransformation::transformMatrix()
 {

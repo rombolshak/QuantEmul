@@ -28,21 +28,30 @@
 #define UNITARYTRANSFORMATION_H
 
 #include "Eigen/Dense"
+#include "hilbertspace.h"
+#include "quantumstate.h"
 
 using namespace Eigen;
 
 class UnitaryTransformation
 {
 public:
-    UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis);
+    UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space);
+    UnitaryTransformation(MatrixXcd matrix, HilbertSpace space);
     
     MatrixXcd transformMatrix();
+    void applyTo(QuantumState* state);
     
 protected:
     MatrixXcd _matrix;
+    HilbertSpace _space;
 private:
     void _checkMatricesAreSquare(MatrixXcd oldBasis, MatrixXcd newBasis);
     void _checkMatricesHaveTheSameSize(MatrixXcd oldBasis, MatrixXcd newBasis);
+    void _checkMatrixIsSquare(MatrixXcd matr);
+    void _checkMatrixIsUnitary(MatrixXcd matrix);
+    void _continueConstruct();
+    void _checkSpace();
 };
 
 #endif // UNITARYTRANSFORMATION_H
