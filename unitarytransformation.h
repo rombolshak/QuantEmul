@@ -44,6 +44,7 @@ public:
     QuantumState* applyTo(QuantumState* state);
     
 protected:
+    UnitaryTransformation();
     MatrixXcd _matrix;
     HilbertSpace _space;
 private:

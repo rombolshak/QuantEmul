@@ -107,3 +107,8 @@ HilbertSpace UnitaryTransformation::space()
 {
     return _space;
 }
+
+UnitaryTransformation::UnitaryTransformation()
+{
+
+}
