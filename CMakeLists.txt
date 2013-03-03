@@ -21,3 +21,5 @@ add_test(
 )
 
 install(TARGETS quantemul RUNTIME DESTINATION bin)
+
+add_subdirectory(transforms)

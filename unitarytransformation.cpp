@@ -102,3 +102,8 @@ MatrixXcd UnitaryTransformation::transformMatrix()
 {
     return _matrix;
 }
+
+HilbertSpace UnitaryTransformation::space()
+{
+    return _space;
+}
