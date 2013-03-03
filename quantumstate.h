@@ -71,6 +71,11 @@ public:
      */
     void setMatrix(MatrixXcd matr);
     
+    /**
+     * Returns space in which this state exists
+     */
+    HilbertSpace space();
+    
 private:
     MatrixXcd _density;
     HilbertSpace _space;

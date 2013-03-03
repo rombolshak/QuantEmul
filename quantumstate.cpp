@@ -104,3 +104,9 @@ void QuantumState::setMatrix(MatrixXcd matr) {
     _checkMatrixIsDensityMatrix(matr);
     _density = matr;
 }
+
+HilbertSpace QuantumState::space()
+{
+    return _space;
+}
+
