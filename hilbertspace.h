@@ -75,6 +75,9 @@ public:
      * @param second Hilbert space that will be added to current space
      */
     void tensorWith(HilbertSpace second);
+    
+    bool operator==(const HilbertSpace& other);
+    bool operator!=(const HilbertSpace& other);
 
 private:
     int _rank, _dim;

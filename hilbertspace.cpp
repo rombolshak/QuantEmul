@@ -83,5 +83,13 @@ void HilbertSpace::tensorWith(HilbertSpace second)
     _dim *= second.totalDimension();
 }
 
+bool HilbertSpace::operator==(const HilbertSpace& other)
+{
+    return _dimensions == other._dimensions;
+}
 
+bool HilbertSpace::operator!=(const HilbertSpace& other)
+{
+    return !operator==(other);
+}
 
