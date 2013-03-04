@@ -14,7 +14,7 @@ Compile
 =======
 You'll need CMake to compile this project properly
 
-1. cd <QuantEmul/directory/path>
+1. cd QuantEmul/directory/path
 2. mkdir build
 3. cd build
 4. cmake ..
