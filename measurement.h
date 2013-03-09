@@ -35,17 +35,20 @@ class Measurement
 {
 public:
     Measurement();
-    Measurement(std::vector < MatrixXcd > operators);
+    Measurement(std::vector < MatrixXcd > operators, std::vector<std::string> labels);
     
-    void addOperator(MatrixXcd matr);
-    Measurement& operator +=(MatrixXcd matr);
+    void addOperator(MatrixXcd matr, std::string label);
+    
+    
     
     std::vector<MatrixXcd> operators();
+    std::vector<std::string> labels();
     bool isValid();
     std::string error();
     
 private:
     std::vector<MatrixXcd> _operators;
+    std::vector<std::string> _labels;
     bool _valid;
     std::string _err;
     bool _checkOperatorsHaveTheSameSize();

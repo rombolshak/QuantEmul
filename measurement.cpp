@@ -31,24 +31,23 @@
 Measurement::Measurement()
 {
     _err = "Operators set cannot be empty";
+    _valid = false;
 }
 
-Measurement::Measurement(std::vector<MatrixXcd> operators)
+Measurement::Measurement(std::vector<MatrixXcd> operators, std::vector<std::string> labels)
 {
+    if (operators.size() != labels.size())
+	throw std::invalid_argument("Number of labels must be the same as operators");
     _operators = operators;
+    _labels = labels;
     _checkOperatorsAreValid();
 }
 
-void Measurement::addOperator(MatrixXcd matr)
+void Measurement::addOperator(MatrixXcd matr, std::string label)
 {
     _operators.push_back(matr);
+    _labels.push_back(label);
     _checkOperatorsAreValid();
-}
-
-Measurement& Measurement::operator+=(MatrixXcd matr)
-{
-    addOperator(matr);
-    return *this;
 }
 
 #include <iostream>
@@ -118,6 +117,7 @@ bool Measurement::_checkOperatorsArePositive()
     return true;
 }
 
+
 bool Measurement::isValid()
 {
     return _valid;
@@ -131,4 +131,9 @@ std::vector< MatrixXcd > Measurement::operators()
 std::string Measurement::error()
 {
     return _err;
+}
+
+std::vector< std::string > Measurement::labels()
+{
+    return _labels;
 }
