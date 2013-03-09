@@ -110,3 +110,15 @@ TEST(MeasurementTest, TestPerformingMeasure) {
 	EXPECT_EQ("|1><1|", measure.performOn(&state));
     }
 }
+
+TEST(MeasurementTest, TestConstructWithObservable) {
+    MatrixXcd ob(2,2);
+    ob << 0,1,1,0; // Pauli-X
+    
+    Measurement measure(ob);
+    QuantumState state(Vector2cd(1,1), HilbertSpace(2));
+    
+    EXPECT_EQ(true, measure.isValid());
+    EXPECT_EQ(0, measure.probabilities(state)["1"]);
+    EXPECT_EQ("0", measure.performOn(&state));
+}

@@ -27,7 +27,19 @@
 #include "measurement.h"
 #include "Eigen/Eigenvalues"
 #include <stdexcept>
+#include <string>
 
+std::string i_to_string(int i)
+{
+    std::stringstream ss;
+    std::string s;
+    ss << i;
+    s = ss.str();
+    
+    return s;
+}
+
+#ifndef Constructors
 Measurement::Measurement()
 {
     _err = "Operators set cannot be empty";
@@ -43,6 +55,16 @@ Measurement::Measurement(std::vector<MatrixXcd> operators, std::vector<std::stri
     _checkOperatorsAreValid();
 }
 
+Measurement::Measurement(MatrixXcd observable)
+{
+    ComplexEigenSolver<MatrixXcd> solver(observable);
+    MatrixXcd vectors = solver.eigenvectors();
+    for (int i = 0; i < vectors.cols(); ++i)
+	addOperator(vectors.col(i) * vectors.col(i).transpose(), i_to_string(i));    
+    _checkOperatorsAreValid();
+}
+#endif
+
 void Measurement::addOperator(MatrixXcd matr, std::string label)
 {
     _operators.push_back(matr);
@@ -50,7 +72,7 @@ void Measurement::addOperator(MatrixXcd matr, std::string label)
     _checkOperatorsAreValid();
 }
 
-#include <iostream>
+#ifndef Checks
 void Measurement::_checkOperatorsAreValid()
 {
     if (true 
@@ -116,7 +138,7 @@ bool Measurement::_checkOperatorsArePositive()
     }
     return true;
 }
-
+#endif
 
 std::map< std::string, double > Measurement::probabilities(QuantumState state)
 {
@@ -128,6 +150,9 @@ std::map< std::string, double > Measurement::probabilities(QuantumState state)
 
 std::string Measurement::performOn(QuantumState* state)
 {
+    if (!_valid) 
+	throw std::runtime_error("You cannot perform this measurement because " + _err);
+    
     std::map< std::string, double > probs = probabilities(*state);
     
     srand(time(NULL));
@@ -152,6 +177,7 @@ std::string Measurement::performOn(QuantumState* state)
     return _labels[outcomeNum];
 }
 
+#ifndef Getters
 bool Measurement::isValid()
 {
     return _valid;
@@ -171,3 +197,4 @@ std::vector< std::string > Measurement::labels()
 {
     return _labels;
 }
+#endif

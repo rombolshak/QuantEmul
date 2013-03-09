@@ -38,6 +38,7 @@ class Measurement
 public:
     Measurement();
     Measurement(std::vector < MatrixXcd > operators, std::vector<std::string> labels);
+    Measurement(MatrixXcd observable);
     
     void addOperator(MatrixXcd matr, std::string label);
     
