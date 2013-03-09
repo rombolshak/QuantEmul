@@ -126,6 +126,31 @@ std::map< std::string, double > Measurement::probabilities(QuantumState state)
     return res;
 }
 
+std::string Measurement::performOn(QuantumState* state)
+{
+    std::map< std::string, double > probs = probabilities(*state);
+    
+    srand(time(NULL));
+    double r = (double) rand() / RAND_MAX;
+    
+    int outcomeNum = 0;
+    double probSum = probs[_labels[outcomeNum]];
+    
+    while (r > probSum) 
+	probSum += probs[_labels[++outcomeNum]];
+    
+    // now in outcomeNum we have our outcome index
+    // lets perform changing state
+    // first, we need to compute square root of operator
+    
+    SelfAdjointEigenSolver<MatrixXcd> solver(_operators[outcomeNum]);
+    MatrixXcd root = solver.operatorSqrt();
+    
+    MatrixXcd newMatrix = (root * state->densityMatrix() * root) / probs[_labels[outcomeNum]];
+    state->setMatrix(newMatrix);
+    
+    return _labels[outcomeNum];
+}
 
 bool Measurement::isValid()
 {

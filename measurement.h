@@ -42,6 +42,7 @@ public:
     void addOperator(MatrixXcd matr, std::string label);
     
     std::map<std::string, double> probabilities(QuantumState state);
+    std::string performOn(QuantumState* state);
     
     std::vector<MatrixXcd> operators();
     std::vector<std::string> labels();

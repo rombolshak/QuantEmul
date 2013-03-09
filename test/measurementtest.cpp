@@ -79,14 +79,34 @@ TEST(MeasurementTest, TestConstructWithNonHermitOperators) {
 TEST(MeasurementTest, TestProbabilities) {
     Measurement measure;
     Matrix2cd op; 
-    op << 1,0,0,0;    measure.addOperator(op, "|0>");
-    op << 0,0,0,1;    measure.addOperator(op, "|1>");
+    op << 1,0,0,0;    measure.addOperator(op, "|0><0|");
+    op << 0,0,0,1;    measure.addOperator(op, "|1><1|");
     
     QuantumState state(Vector2cd(1,1), HilbertSpace(2));    
-    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|0>"]) < 1.0e-15);
-    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|1>"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|0><0|"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|1><1|"]) < 1.0e-15);
     
     state = QuantumState(Vector2cd(1,0), HilbertSpace(2));
-    EXPECT_EQ(true, abs(1 - measure.probabilities(state)["|0>"]) < 1.0e-15);
-    EXPECT_EQ(true, abs(0 - measure.probabilities(state)["|1>"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(1 - measure.probabilities(state)["|0><0|"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(0 - measure.probabilities(state)["|1><1|"]) < 1.0e-15);
+}
+
+TEST(MeasurementTest, TestPerformingMeasure) {
+    Measurement measure;
+    Matrix2cd pr0, pr1; 
+    pr0 << 1,0,0,0;    measure.addOperator(pr0, "|0><0|");
+    pr1 << 0,0,0,1;    measure.addOperator(pr1, "|1><1|");
+    
+    QuantumState state(Vector2cd(1,1), HilbertSpace(2));
+    
+    if (measure.performOn(&state) == "|0><0|")
+    {
+	EXPECT_EQ(pr0, state.densityMatrix());
+	EXPECT_EQ("|0><0|", measure.performOn(&state));
+    }
+    else
+    {
+	EXPECT_EQ(pr1, state.densityMatrix());
+	EXPECT_EQ("|1><1|", measure.performOn(&state));
+    }
 }
