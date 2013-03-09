@@ -39,7 +39,7 @@ class QuantumState
 public:
     /**
      * Constructs an instance of quantum state
-     * @param matr Density matrix of the state OR state vector (can be denormalized). Density matrix is self-adjoint (or Hermitian), positive semi-definite, of trace one
+     * @param matr Density matrix of the state OR state vector (can be unnormalized). Density matrix is self-adjoint (or Hermitian), positive semi-definite, of trace one
      * @param space Hilbert space in which state exists
      */
     QuantumState(MatrixXcd matr, HilbertSpace space);
