@@ -118,6 +118,15 @@ bool Measurement::_checkOperatorsArePositive()
 }
 
 
+std::map< std::string, double > Measurement::probabilities(QuantumState state)
+{
+    std::map< std::string, double > res;
+    for (int i = 0; i < _operators.size(); ++i)
+	res[_labels[i]] = (state.densityMatrix() * _operators[i]).trace().real();
+    return res;
+}
+
+
 bool Measurement::isValid()
 {
     return _valid;

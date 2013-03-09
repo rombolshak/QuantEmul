@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "../measurement.h"
 #include "../Eigen/Dense"
+#include "../quantumstate.h"
 
 using namespace std;
 
@@ -73,4 +74,19 @@ TEST(MeasurementTest, TestConstructWithNonHermitOperators) {
     
     EXPECT_EQ(false, measure.isValid());
     EXPECT_EQ("Operators must be Hermit", measure.error());
+}
+
+TEST(MeasurementTest, TestProbabilities) {
+    Measurement measure;
+    Matrix2cd op; 
+    op << 1,0,0,0;    measure.addOperator(op, "|0>");
+    op << 0,0,0,1;    measure.addOperator(op, "|1>");
+    
+    QuantumState state(Vector2cd(1,1), HilbertSpace(2));    
+    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|0>"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(0.5 - measure.probabilities(state)["|1>"]) < 1.0e-15);
+    
+    state = QuantumState(Vector2cd(1,0), HilbertSpace(2));
+    EXPECT_EQ(true, abs(1 - measure.probabilities(state)["|0>"]) < 1.0e-15);
+    EXPECT_EQ(true, abs(0 - measure.probabilities(state)["|1>"]) < 1.0e-15);
 }

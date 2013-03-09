@@ -28,7 +28,9 @@
 #define MEASUREMENT_H
 
 #include "Eigen/Core"
+#include "quantumstate.h"
 #include <vector>
+#include <map>
 using namespace Eigen;
 
 class Measurement
@@ -39,7 +41,7 @@ public:
     
     void addOperator(MatrixXcd matr, std::string label);
     
-    
+    std::map<std::string, double> probabilities(QuantumState state);
     
     std::vector<MatrixXcd> operators();
     std::vector<std::string> labels();
