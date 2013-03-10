@@ -44,6 +44,8 @@ QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
     _space = space;
 }
 
+#ifndef Checks
+
 void QuantumState::_calculateEigenValuesAndVectors(MatrixXcd matr) {
     if (!_checkMatrixIsSelfAdjoined(matr))
 	throw std::invalid_argument("Matrix should be selfadjoined");
@@ -80,17 +82,7 @@ void QuantumState::_checkSpaceDimension(MatrixXcd matr, HilbertSpace space) {
 	throw std::invalid_argument("Space total dimension shold be the same as matrix is");
 }
 
-MatrixXcd QuantumState::densityMatrix() {
-    return _density;
-}
-
-VectorXd QuantumState::eigenValues() {
-    return _eigenValues;
-}
-
-MatrixXcd QuantumState::eigenVectors() {
-    return _eigenVectors;
-}
+#endif
 
 bool QuantumState::isPure() {
     MatrixXcd square = _density * _density;
@@ -105,8 +97,22 @@ void QuantumState::setMatrix(MatrixXcd matr) {
     _density = matr;
 }
 
-HilbertSpace QuantumState::space()
-{
+#ifndef Getters
+
+HilbertSpace QuantumState::space() {
     return _space;
 }
 
+MatrixXcd QuantumState::densityMatrix() {
+    return _density;
+}
+
+VectorXd QuantumState::eigenValues() {
+    return _eigenValues;
+}
+
+MatrixXcd QuantumState::eigenVectors() {
+    return _eigenVectors;
+}
+
+#endif

@@ -29,12 +29,13 @@
 
 using namespace std;
 
+#ifndef Constructors
+
 HilbertSpace::HilbertSpace()
 {
     _rank = 0;
     _dim = 0;
 }
-
 
 HilbertSpace::HilbertSpace(uint dim)
 {
@@ -43,7 +44,6 @@ HilbertSpace::HilbertSpace(uint dim)
     _dimensions.push_back(dim);
     _dim = dim;
 }
-
 
 HilbertSpace::HilbertSpace(std::vector< uint > dimensions) 
 {
@@ -56,24 +56,7 @@ HilbertSpace::HilbertSpace(std::vector< uint > dimensions)
     _dimensions = dimensions;
 }
 
-
-int HilbertSpace::rank() 
-{
-    return _rank;
-}
-
-int HilbertSpace::dimension(int index)
-{
-    if (index < 0) throw out_of_range("Did you ever seen an negative dimension index? You should stop take drugs, really");
-    if (index >= _rank) throw out_of_range("This space is less than you think. There is no dimension with such big index, sorry");
-    return _dimensions[index];
-}
-
-int HilbertSpace::totalDimension()
-{
-    return _dim;
-}
-
+#endif
 
 void HilbertSpace::tensorWith(HilbertSpace second)
 {
@@ -93,3 +76,23 @@ bool HilbertSpace::operator!=(const HilbertSpace& other)
     return !operator==(other);
 }
 
+#ifndef Getters
+
+int HilbertSpace::rank() 
+{
+    return _rank;
+}
+
+int HilbertSpace::dimension(int index)
+{
+    if (index < 0) throw out_of_range("Did you ever seen an negative dimension index? You should stop take drugs, really");
+    if (index >= _rank) throw out_of_range("This space is less than you think. There is no dimension with such big index, sorry");
+    return _dimensions[index];
+}
+
+int HilbertSpace::totalDimension()
+{
+    return _dim;
+}
+
+#endif

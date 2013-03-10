@@ -28,6 +28,12 @@
 #include "Eigen/LU"
 #include <stdexcept>
 
+#ifndef Constructors
+UnitaryTransformation::UnitaryTransformation()
+{
+    
+}
+
 UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space)
 {
     _checkMatricesAreSquare(oldBasis, newBasis);
@@ -42,6 +48,19 @@ UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBa
     _continueConstruct();
 }
 
+UnitaryTransformation::UnitaryTransformation(MatrixXcd matrix, HilbertSpace space)
+{
+    _checkMatrixIsSquare(matrix);
+    _checkMatrixIsUnitary(matrix);
+    _matrix = matrix;
+    _space = space;
+    _continueConstruct();
+}
+
+#endif
+
+#ifndef Checks
+
 void UnitaryTransformation::_checkMatricesAreSquare(MatrixXcd oldBasis, MatrixXcd newBasis)
 {
     if (oldBasis.cols() != oldBasis.rows())
@@ -54,15 +73,6 @@ void UnitaryTransformation::_checkMatricesHaveTheSameSize(MatrixXcd oldBasis, Ma
 {
     if (oldBasis.cols() != newBasis.cols())
 	throw std::invalid_argument("Matrices of basises must be the same size. How do you imagine transform from space dimension 6 to space dimension 42, for example?");
-}
-
-UnitaryTransformation::UnitaryTransformation(MatrixXcd matrix, HilbertSpace space)
-{
-    _checkMatrixIsSquare(matrix);
-    _checkMatrixIsUnitary(matrix);
-    _matrix = matrix;
-    _space = space;
-    _continueConstruct();
 }
 
 void UnitaryTransformation::_checkMatrixIsSquare(MatrixXcd matr)
@@ -89,6 +99,8 @@ void UnitaryTransformation::_checkSpace()
 	throw std::invalid_argument("Incorrect space was passed to the transformation");
 }
 
+#endif
+
 QuantumState* UnitaryTransformation::applyTo(QuantumState* state)
 {
     if (_space != state->space())
@@ -97,6 +109,7 @@ QuantumState* UnitaryTransformation::applyTo(QuantumState* state)
     return state;
 }
 
+#ifndef Getters
 
 MatrixXcd UnitaryTransformation::transformMatrix()
 {
@@ -108,7 +121,4 @@ HilbertSpace UnitaryTransformation::space()
     return _space;
 }
 
-UnitaryTransformation::UnitaryTransformation()
-{
-
-}
+#endif
