@@ -40,6 +40,7 @@ std::string i_to_string(int i)
 }
 
 #ifndef Constructors
+
 Measurement::Measurement()
 {
     _err = "Operators set cannot be empty";
@@ -63,7 +64,6 @@ Measurement::Measurement(MatrixXcd observable)
 	addOperator(vectors.col(i) * vectors.col(i).transpose(), i_to_string(i));    
     _checkOperatorsAreValid();
 }
-#endif
 
 void Measurement::addOperator(MatrixXcd matr, std::string label)
 {
@@ -72,7 +72,10 @@ void Measurement::addOperator(MatrixXcd matr, std::string label)
     _checkOperatorsAreValid();
 }
 
+#endif
+
 #ifndef Checks
+
 void Measurement::_checkOperatorsAreValid()
 {
     if (true 
@@ -83,7 +86,7 @@ void Measurement::_checkOperatorsAreValid()
     )
 	_valid = true;
 	
-	else _valid = false;
+    else _valid = false;
 }
 
 bool Measurement::_checkOperatorsHaveTheSameSize()
@@ -138,10 +141,23 @@ bool Measurement::_checkOperatorsArePositive()
     }
     return true;
 }
+
+void Measurement::_checkSpacesDimensionsMatches(HilbertSpace space)
+{
+    if (_operators[0].cols() != space.totalDimension())
+	throw std::invalid_argument("State space dimension does not match operators dimension");
+}
+
 #endif
+
+#ifndef Performing
 
 std::map< std::string, double > Measurement::probabilities(QuantumState state)
 {
+    if (!_valid) 
+	throw std::runtime_error("You cannot test probabilities because " + _err);
+    _checkSpacesDimensionsMatches(state.space());
+    
     std::map< std::string, double > res;
     for (int i = 0; i < _operators.size(); ++i)
 	res[_labels[i]] = (state.densityMatrix() * _operators[i]).trace().real();
@@ -152,6 +168,7 @@ std::string Measurement::performOn(QuantumState* state)
 {
     if (!_valid) 
 	throw std::runtime_error("You cannot perform this measurement because " + _err);
+    _checkSpacesDimensionsMatches(state->space());
     
     std::map< std::string, double > probs = probabilities(*state);
     
@@ -177,7 +194,10 @@ std::string Measurement::performOn(QuantumState* state)
     return _labels[outcomeNum];
 }
 
+#endif
+
 #ifndef Getters
+
 bool Measurement::isValid()
 {
     return _valid;
@@ -197,4 +217,5 @@ std::vector< std::string > Measurement::labels()
 {
     return _labels;
 }
+
 #endif
