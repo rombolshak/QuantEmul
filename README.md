@@ -9,6 +9,7 @@ Structure
 - quantumstate.{h,cpp}. Represent, as you can guess, quantum state implementation. It is not ideal, I know
 - unitarytransformation.{h,cpp}. General class and methods for state transforms
 - transforms/ contain several implementation of simple transforms such as NOT, CNOT, Pauli, Toffoli, SWAP
+- measurement.{h.cpp}. Represent general measurements of quantum states
 
 Compile
 =======
