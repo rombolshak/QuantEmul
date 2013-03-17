@@ -24,10 +24,11 @@
 */
 
 
-#include "quantumstate.h"
+#include "quantum_state.h"
+#include "kronecker_tensor.h"
 #include <stdexcept>
 
-QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
+QuantumState::QuantumState(MatrixXcd matr, const HilbertSpace & space)
 {
     if (matr.cols() == 1) {// state represented by vector, need to construct matrix	
 	matr.normalize();
@@ -43,6 +44,16 @@ QuantumState::QuantumState(MatrixXcd matr, HilbertSpace space)
     _checkSpaceDimension(_density, space);
     _space = space;
 }
+
+#include <iostream>
+QuantumState QuantumState::tensor(const QuantumState& first, const QuantumState& second)
+{
+    QuantumState res (
+	KroneckerTensor::product(first._density, second._density), HilbertSpace::tensor(first._space, second._space));//*tensorSpace);
+
+    return res;
+}
+
 
 #ifndef Checks
 

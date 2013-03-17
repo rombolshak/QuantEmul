@@ -28,7 +28,7 @@
 #define MEASUREMENT_H
 
 #include "Eigen/Core"
-#include "quantumstate.h"
+#include "quantum_state.h"
 #include <vector>
 #include <map>
 using namespace Eigen;

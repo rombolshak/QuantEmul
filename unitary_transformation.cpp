@@ -24,7 +24,7 @@
 */
 
 
-#include "unitarytransformation.h"
+#include "unitary_transformation.h"
 #include "Eigen/LU"
 #include <stdexcept>
 

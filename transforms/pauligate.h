@@ -27,7 +27,7 @@
 #ifndef PAULIGATE_H
 #define PAULIGATE_H
 
-#include <../../unitarytransformation.h>
+#include <../../unitary_transformation.h>
 
 /**
  * Represents three Pauli gates. Pauli-X is NOT gate. Pauli-Y and Pauli-Z are rotations around Y and Z axis respectively

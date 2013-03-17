@@ -27,7 +27,7 @@
 #ifndef PHASESHIFTGATE_H
 #define PHASESHIFTGATE_H
 
-#include <../../unitarytransformation.h>
+#include <../../unitary_transformation.h>
 
 /**
  * Represents gate that leave |0> unchanged and map |1> to e^(i*teta)|1>

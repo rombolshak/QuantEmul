@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "../measurement.h"
 #include "../Eigen/Dense"
-#include "../quantumstate.h"
+#include "../quantum_state.h"
 
 using namespace std;
 

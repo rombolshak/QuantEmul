@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "../quantumstate.h"
+#include "../quantum_state.h"
 #include "../Eigen/Core"
-#include "../hilbertspace.h"
+#include "../hilbert_space.h"
 
 
 TEST(QuantumStateTest, TestConstructWithMatrix) {
@@ -99,4 +99,14 @@ TEST(QuantumStateTest, TestPureStateDetermination) {
     
     EXPECT_EQ(true, pureState.isPure());
     EXPECT_EQ(false, mixedState.isPure());
+}
+
+TEST(QuantumStateTest, TestTensorProduct) {
+    QuantumState state = QuantumState::tensor(QuantumState(Vector2cd(1,0), HilbertSpace(2)), QuantumState(Vector2cd(0,1), HilbertSpace(2)));
+    Matrix4cd res = Matrix4cd::Zero();
+    res(1,1)=1;
+    
+    EXPECT_EQ(res, state.densityMatrix());
+    EXPECT_EQ(2, state.space().rank());
+    EXPECT_EQ(2, state.space().dimension(1));
 }

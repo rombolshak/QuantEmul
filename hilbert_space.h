@@ -52,29 +52,31 @@ public:
      * Construct a tensor product of Hilbert spaces with specified dimensions
      * @param dimensions Dimensions of components of the result space, must be strongly positive
      */
-    HilbertSpace(std::vector<uint> dimensions);
+    HilbertSpace(const std::vector< uint >& dimensions);
+    
+    static HilbertSpace tensor(const HilbertSpace& first, const HilbertSpace& second);
     
     /**
      * Rank of the space
      */
-    int rank();
+    int rank() const;
     
     /**
      * Returns dimension of the subspace defined by index
      * @param index Index of needed subspace, starts from 0
      */
-    int dimension(int index);
+    int dimension(int index) const;
     
     /**
      * Returns sum of all subspace dimensions
      */
-    int totalDimension();
+    int totalDimension() const;
     
     /**
      * Do a tensor product with specified space
      * @param second Hilbert space that will be added to current space
      */
-    void tensorWith(HilbertSpace second);
+    void tensorWith(const HilbertSpace& second);
     
     bool operator==(const HilbertSpace& other);
     bool operator!=(const HilbertSpace& other);

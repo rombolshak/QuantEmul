@@ -26,7 +26,7 @@
 
 #ifndef HADAMARDGATE_H
 #define HADAMARDGATE_H
-#include "../unitarytransformation.h"
+#include <../../unitary_transformation.h>
 
 /**
  * Represents the Hadamard gate: transform |0> to |0> + |1> and |1> to |0> - |1>

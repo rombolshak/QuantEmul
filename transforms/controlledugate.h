@@ -27,7 +27,7 @@
 #ifndef CONTROLLEDUGATE_H
 #define CONTROLLEDUGATE_H
 
-#include <../../unitarytransformation.h>
+#include <../../unitary_transformation.h>
 
 /**
  * Class representing Controlled U gate. This is 2 qubit transform. When the first is equal to 1, apply transform U to the second

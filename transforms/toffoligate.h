@@ -27,7 +27,7 @@
 #ifndef TOFFOLIGATE_H
 #define TOFFOLIGATE_H
 
-#include <../../unitarytransformation.h>
+#include <../../unitary_transformation.h>
 
 /**
  * If the first two bits are in the state |1>, it applies a Pauli-X on the third bit, else it does nothing

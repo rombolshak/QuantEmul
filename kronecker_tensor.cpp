@@ -24,19 +24,16 @@
 */
 
 
-#ifndef SWAPGATE_H
-#define SWAPGATE_H
+#include "kronecker_tensor.h"
 
-#include <../../unitary_transformation.h>
-
-/**
- * The swap gate swaps two qubits
- */
-class SwapGate : public UnitaryTransformation
+MatrixXcd KroneckerTensor::product(MatrixXcd a, MatrixXcd b)
 {
-
-public:
-    SwapGate();
-};
-
-#endif // SWAPGATE_H
+    MatrixXcd res(a.rows() * b.rows(), a.cols() * b.cols());
+    
+    for (int i = 0; i < a.rows(); ++i)
+	for (int j = 0; j < a.cols(); ++j)
+	    for (int k = 0; k < b.rows(); ++k)
+		for (int l = 0; l < b.cols(); ++l)
+		    res(i * b.rows() + k, j * b.cols() + l) = a(i, j) * b(k, l);
+    return res;
+}

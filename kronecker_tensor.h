@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -24,19 +24,16 @@
 */
 
 
-#ifndef SWAPGATE_H
-#define SWAPGATE_H
+#ifndef KRONECKER_TENSOR_H
+#define KRONECKER_TENSOR_H
 
-#include <../../unitary_transformation.h>
+#include "Eigen/Core"
+using namespace Eigen;
 
-/**
- * The swap gate swaps two qubits
- */
-class SwapGate : public UnitaryTransformation
+class KroneckerTensor
 {
-
 public:
-    SwapGate();
+    static MatrixXcd product(MatrixXcd first, MatrixXcd second);
 };
 
-#endif // SWAPGATE_H
+#endif // KRONECKER_TENSOR_H

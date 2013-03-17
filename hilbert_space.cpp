@@ -24,7 +24,7 @@
 */
 
 
-#include "hilbertspace.h"
+#include "hilbert_space.h"
 #include <stdexcept>
 
 using namespace std;
@@ -45,7 +45,7 @@ HilbertSpace::HilbertSpace(uint dim)
     _dim = dim;
 }
 
-HilbertSpace::HilbertSpace(std::vector< uint > dimensions) 
+HilbertSpace::HilbertSpace(const std::vector< uint >& dimensions) 
 {
     _rank = dimensions.size();
     _dim = 1; // need to prevent multiply with default value
@@ -58,12 +58,19 @@ HilbertSpace::HilbertSpace(std::vector< uint > dimensions)
 
 #endif
 
-void HilbertSpace::tensorWith(HilbertSpace second)
+HilbertSpace HilbertSpace::tensor(const HilbertSpace& first, const HilbertSpace& second)
+{
+    HilbertSpace space = first;
+    space.tensorWith(second);
+    return space; // молимся, чтоб память выделялась не на стеке...
+}
+
+void HilbertSpace::tensorWith(const HilbertSpace& second)
 {
     _rank += second._rank;
     for (int i = 0; i < second._rank; ++i)
 	_dimensions.push_back(second._dimensions[i]);
-    _dim *= second.totalDimension();
+    _dim *= second._dim;
 }
 
 bool HilbertSpace::operator==(const HilbertSpace& other)
@@ -78,19 +85,19 @@ bool HilbertSpace::operator!=(const HilbertSpace& other)
 
 #ifndef Getters
 
-int HilbertSpace::rank() 
+int HilbertSpace::rank() const 
 {
     return _rank;
 }
 
-int HilbertSpace::dimension(int index)
+int HilbertSpace::dimension(int index) const
 {
     if (index < 0) throw out_of_range("Did you ever seen an negative dimension index? You should stop take drugs, really");
     if (index >= _rank) throw out_of_range("This space is less than you think. There is no dimension with such big index, sorry");
     return _dimensions[index];
 }
 
-int HilbertSpace::totalDimension()
+int HilbertSpace::totalDimension() const
 {
     return _dim;
 }

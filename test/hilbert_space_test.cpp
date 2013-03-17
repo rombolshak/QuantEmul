@@ -1,4 +1,4 @@
-#include "../hilbertspace.h"
+#include "../hilbert_space.h"
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -76,6 +76,15 @@ TEST_F(HilbertSpaceTest, CheckTotalDimension) {
     
     space.tensorWith(HilbertSpace(5));
     EXPECT_EQ(60, space.totalDimension());
+}
+
+TEST_F(HilbertSpaceTest, CheckTensor) {
+    HilbertSpace space(dims);
+    HilbertSpace tensor = HilbertSpace::tensor(space, HilbertSpace(2));
+    
+    EXPECT_EQ(24, tensor.totalDimension());
+    EXPECT_EQ(3, tensor.rank());
+    EXPECT_EQ(2, space.rank());
 }
 
 }

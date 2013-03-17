@@ -28,8 +28,8 @@
 #define UNITARYTRANSFORMATION_H
 
 #include "Eigen/Dense"
-#include "hilbertspace.h"
-#include "quantumstate.h"
+#include "hilbert_space.h"
+#include "quantum_state.h"
 
 using namespace Eigen;
 

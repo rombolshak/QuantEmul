@@ -27,7 +27,7 @@
 #ifndef QUANTUMSTATE_H
 #define QUANTUMSTATE_H
 #include "Eigen/Dense"
-#include "hilbertspace.h"
+#include "hilbert_space.h"
 
 using namespace Eigen;
 
@@ -42,12 +42,17 @@ public:
      * @param matr Density matrix of the state OR state vector (can be unnormalized). Density matrix is self-adjoint (or Hermitian), positive semi-definite, of trace one
      * @param space Hilbert space in which state exists
      */
-    QuantumState(MatrixXcd matr, HilbertSpace space);
+    QuantumState(MatrixXcd matr, const HilbertSpace& space);
     
     /**
      * Returns density matrix of current state
      */
     MatrixXcd densityMatrix();
+    
+    /**
+     * Create new state that will be result of tensor product of 2 other states
+     */
+    static QuantumState tensor(const QuantumState& first, const QuantumState& second);
     
     /**
      * Returns eigen values in vector of *real* numbers. Size of vector equals to the density matrix size

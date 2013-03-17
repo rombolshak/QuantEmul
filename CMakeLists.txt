@@ -11,7 +11,9 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 #find_package(Eigen3 REQUIRED)
 #include_directories(${EIGEN3_INCLUDE_DIR})
 
-add_executable(quantemul measurement.cpp transforms/toffoligate.cpp transforms/controlledugate.cpp transforms/swapgate.cpp transforms/phaseshiftgate.cpp transforms/pauligate.cpp transforms/hadamardgate.cpp unitarytransformation.cpp quantumstate.cpp hilbertspace.cpp main.cpp test/test.cpp test/hilbertspacetest.cpp test/quantumstatetest.cpp test/unitarytransformationtest.cpp test/transformationstest.cpp test/measurementtest.cpp)
+add_executable(quantemul kronecker_tensor.cpp measurement.cpp unitary_transformation.cpp quantum_state.cpp hilbert_space.cpp main.cpp 
+	    transforms/toffoligate.cpp transforms/controlledugate.cpp transforms/swapgate.cpp transforms/phaseshiftgate.cpp transforms/pauligate.cpp transforms/hadamardgate.cpp 	    
+	    test/test.cpp test/kronecker_tensor_test.cpp test/hilbert_space_test.cpp test/quantum_state_test.cpp test/unitary_transformation_test.cpp test/transformationstest.cpp test/measurementtest.cpp)
 add_subdirectory(test)
 target_link_libraries(quantemul gtest gtest_main)
 

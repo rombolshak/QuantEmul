@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "../unitarytransformation.h"
-#include "../hilbertspace.h"
+#include "../unitary_transformation.h"
+#include "../hilbert_space.h"
 #include "../Eigen/Dense"
-#include "../quantumstate.h"
+#include "../quantum_state.h"
 
 using namespace Eigen;
 
