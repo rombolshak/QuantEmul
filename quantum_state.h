@@ -54,6 +54,8 @@ public:
      */
     static QuantumState tensor(const QuantumState& first, const QuantumState& second);
     
+    QuantumState partialTrace(int index);
+    
     /**
      * Returns eigen values in vector of *real* numbers. Size of vector equals to the density matrix size
      */
@@ -79,7 +81,10 @@ public:
     /**
      * Returns space in which this state exists
      */
-    HilbertSpace space();
+    HilbertSpace space();    
+    
+    bool operator==(const QuantumState& other) const;
+    bool operator!=(const QuantumState& other) const;
     
 private:
     MatrixXcd _density;

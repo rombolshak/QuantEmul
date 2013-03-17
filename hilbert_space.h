@@ -78,8 +78,8 @@ public:
      */
     void tensorWith(const HilbertSpace& second);
     
-    bool operator==(const HilbertSpace& other);
-    bool operator!=(const HilbertSpace& other);
+    bool operator==(const HilbertSpace& other) const;
+    bool operator!=(const HilbertSpace& other) const;
 
 private:
     int _rank, _dim;

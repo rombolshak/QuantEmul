@@ -45,15 +45,20 @@ QuantumState::QuantumState(MatrixXcd matr, const HilbertSpace & space)
     _space = space;
 }
 
-#include <iostream>
 QuantumState QuantumState::tensor(const QuantumState& first, const QuantumState& second)
 {
-    QuantumState res (
-	KroneckerTensor::product(first._density, second._density), HilbertSpace::tensor(first._space, second._space));//*tensorSpace);
-
-    return res;
+    return QuantumState(KroneckerTensor::product(first._density, second._density), HilbertSpace::tensor(first._space, second._space));
 }
 
+QuantumState QuantumState::partialTrace(int index)
+{
+    if (index < 0) throw std::invalid_argument("You cannot take partial trace on negative subsystem index");
+    if (index >= _space.rank()) throw std::invalid_argument("This state have not such subsystem");
+    
+    
+    
+    return *this;
+}
 
 #ifndef Checks
 
@@ -127,3 +132,13 @@ MatrixXcd QuantumState::eigenVectors() {
 }
 
 #endif
+
+bool QuantumState::operator==(const QuantumState& other) const
+{
+    return (_density == other._density) && (_space == other._space);
+}
+
+bool QuantumState::operator!=(const QuantumState& other) const
+{
+    return !operator==(other);
+}
