@@ -92,6 +92,10 @@ public:
     int getIndex(VectorXi vec) const;
     static int getIndex(HilbertSpace space, VectorXi vec);
     
+    /**
+     * Returns an vector that corresponds to the computational basis vector.
+     * E.g. vector (1,2) in space H2xH4 is equal to |1,2> = (0,0,0,0,0,0,1,0)
+     */
     VectorXcd getBasisVector(VectorXi basisVec) const;
     
     bool operator==(const HilbertSpace& other) const;

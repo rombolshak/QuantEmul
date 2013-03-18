@@ -58,6 +58,7 @@ HilbertSpace::HilbertSpace(const std::vector< uint >& dimensions)
 
 #endif
 
+#ifndef Tensor
 HilbertSpace HilbertSpace::tensor(const HilbertSpace& first, const HilbertSpace& second)
 {
     HilbertSpace space = first;
@@ -72,6 +73,10 @@ void HilbertSpace::tensorWith(const HilbertSpace& second)
 	_dimensions.push_back(second._dimensions[i]);
     _dim *= second._dim;
 }
+
+#endif
+
+#ifndef Ket-bra
 
 VectorXi HilbertSpace::getVector(int index) const
 {
@@ -121,6 +126,7 @@ VectorXcd HilbertSpace::getBasisVector(VectorXi basisVec) const
     return vec;
 }
 
+#endif
 
 bool HilbertSpace::operator==(const HilbertSpace& other) const
 {

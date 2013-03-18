@@ -49,7 +49,7 @@ QuantumState QuantumState::tensor(const QuantumState& first, const QuantumState&
 {
     return QuantumState(KroneckerTensor::product(first._density, second._density), HilbertSpace::tensor(first._space, second._space));
 }
-#include <iostream>
+
 QuantumState QuantumState::partialTrace(int index) const
 {
     if (index < 0) throw std::invalid_argument("You cannot take partial trace on negative subsystem index");
@@ -58,20 +58,24 @@ QuantumState QuantumState::partialTrace(int index) const
     std::vector <uint> dims = _space.dimensions();
     std::vector<uint>::iterator it = dims.begin() + index;
     dims.erase(it);
-    HilbertSpace newSpace(dims);
+    HilbertSpace newSpace(dims); // space without parts of trace subsystem
     
     MatrixXcd res(newSpace.totalDimension(), newSpace.totalDimension());
     res.setZero();
     
-    for (int row = 0; row < _space.totalDimension(); ++row)
-	for (int col = 0; col < _space.totalDimension() / _space.dimension(index); ++col) {
+    // some magic below
+    for (int row = 0; row < _space.totalDimension(); ++row) // all indexes
+	for (int col = 0; col < _space.totalDimension() / _space.dimension(index); ++col) { // indexes without trace subsystem
 	    
-	    VectorXi vecLeftIndex = _space.getVector(row);
-	    VectorXi vecRightIndex = vecLeftIndex;
+	    // Tr_B (p) = \sum{ <ik|p|jk>|i><j| } where p - density matrix
 	    
-	    VectorXi vecRightRed = newSpace.getVector(col);
-	    VectorXi vecLeftRed = vecRightRed;
+	    VectorXi vecLeftIndex = _space.getVector(row); // |ik>
+	    VectorXi vecRightIndex = vecLeftIndex; // <jk|
 	    
+	    VectorXi vecRightRed = newSpace.getVector(col); // <j|
+	    VectorXi vecLeftRed = vecRightRed; // |i>
+	    
+	    // setting up vecRightIndex[index] to vecLeftIndex[index] (k)
 	    for (int i = 0; i < vecRightIndex.size(); ++i)
 		if (i < index)
 		    vecRightIndex[i] = vecRightRed[i];
@@ -79,6 +83,7 @@ QuantumState QuantumState::partialTrace(int index) const
 		    vecRightIndex[i] = vecRightRed[i-1];
 		else vecRightIndex[i] = vecLeftIndex[index];
 		
+	    // setting up reduced vector - remove part of trace subsystem
 	    for (int i = 0; i < vecRightIndex.size(); ++i)
 		if (i < index)
 		    vecLeftRed[i] = vecLeftIndex[i];
@@ -86,10 +91,10 @@ QuantumState QuantumState::partialTrace(int index) const
 		    vecLeftRed[i-1] = vecLeftIndex[i];
 		else continue;
 		
+	    // <ik|p|jk>
 	    std::complex< double > coef = _space.getBasisVector(vecLeftIndex).transpose() * _density * _space.getBasisVector(vecRightIndex);
 	    
-	    //std::cout << "res = " << std::endl << res << std::endl << "coef = " << coef << std::endl;
-	    
+	    // |i><j| -- i-row and j-col
 	    res(newSpace.getIndex(vecLeftRed), newSpace.getIndex(vecRightRed)) += coef;
 	}
     
