@@ -73,9 +73,11 @@ void HilbertSpace::tensorWith(const HilbertSpace& second)
     _dim *= second._dim;
 }
 
-VectorXcd HilbertSpace::getVector(int index)
+VectorXi HilbertSpace::getVector(int index) const
 {
-    VectorXcd vec(_rank);
+    if (index < 0 || index >= _dim)
+	throw std::invalid_argument("Index must be between 0 and space dimension");
+    VectorXi vec(_rank);
     for (int i = _rank - 1; i >= 0; --i) {
 	vec[i] = index % _dimensions[i];
 	index = (int) floor(1.0 * index / _dimensions[i]);
@@ -83,30 +85,41 @@ VectorXcd HilbertSpace::getVector(int index)
     return vec;
 }
 
-VectorXcd HilbertSpace::getVector(HilbertSpace space, int index)
+VectorXi HilbertSpace::getVector(HilbertSpace space, int index)
 {
     return space.getVector(index);
 }
 
-int HilbertSpace::getIndex(VectorXcd vec)
+int HilbertSpace::getIndex(VectorXi vec) const
 {
     if (vec.size() != _rank)
 	throw std::invalid_argument("Vector size must be equal to space dimension");
-    int index = (int)(vec[vec.size() - 1]).real();
+    int index = vec[vec.size() - 1];
     int multiplier = _dimensions[_rank - 1];
     for (int i = vec.size() - 2; i >= 0; --i) {
-	index += (int) vec[i].real() * multiplier;
+	index += vec[i] * multiplier;
 	multiplier *= _dimensions[i];
     }
 	
     return index;
 }
 
-int HilbertSpace::getIndex(HilbertSpace space, VectorXcd vec)
+int HilbertSpace::getIndex(HilbertSpace space, VectorXi vec)
 {
     return space.getIndex(vec);
 }
 
+VectorXcd HilbertSpace::getBasisVector(VectorXi basisVec) const
+{
+    if (basisVec.size() != _rank)
+	throw std::invalid_argument("Basis vector size must be equal to space dimension");
+    
+    VectorXcd vec(_dim);
+    vec.setZero();
+    vec[getIndex(basisVec)] = 1;
+    
+    return vec;
+}
 
 
 bool HilbertSpace::operator==(const HilbertSpace& other) const
@@ -133,7 +146,7 @@ int HilbertSpace::dimension(int index) const
     return _dimensions[index];
 }
 
-vector<uint> HilbertSpace::dimensions()
+vector<uint> HilbertSpace::dimensions() const
 {
     return _dimensions;
 }

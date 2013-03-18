@@ -81,20 +81,22 @@ public:
     void tensorWith(const HilbertSpace& second);
     
     /**
-     * Returns vector with basis coefficients by index
+     * Returns vector with computational basis coefficients by index
      */
-    VectorXcd getVector(int index);
-    static VectorXcd getVector(HilbertSpace space, int index);
+    VectorXi getVector(int index) const;
+    static VectorXi getVector(HilbertSpace space, int index);
     
     /**
      * Returns index in full space by basis coefficients vector
      */
-    int getIndex(VectorXcd vec);
-    static int getIndex(HilbertSpace space, VectorXcd vec);
+    int getIndex(VectorXi vec) const;
+    static int getIndex(HilbertSpace space, VectorXi vec);
+    
+    VectorXcd getBasisVector(VectorXi basisVec) const;
     
     bool operator==(const HilbertSpace& other) const;
     bool operator!=(const HilbertSpace& other) const;
-    std::vector<uint> dimensions();
+    std::vector<uint> dimensions() const;
 
 private:
     int _rank, _dim;

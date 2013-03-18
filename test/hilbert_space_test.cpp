@@ -90,15 +90,26 @@ TEST_F(HilbertSpaceTest, CheckTensor) {
 TEST_F(HilbertSpaceTest, CheckIndexToVector) {
     HilbertSpace space(dims);
     
-    EXPECT_EQ(Vector2cd(1, 2), space.getVector(6));
-    EXPECT_EQ(Vector2cd(1,2), HilbertSpace::getVector(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), 6));
+    EXPECT_EQ(Vector2i(1, 2), space.getVector(6));
+    EXPECT_EQ(Vector2i(1,2), HilbertSpace::getVector(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), 6));
 }
 
 TEST_F(HilbertSpaceTest, CheckVectorToIndex) {
     HilbertSpace space(dims);
     
-    EXPECT_EQ(6, space.getIndex(Vector2cd(1,2)));
-    EXPECT_EQ(6, HilbertSpace::getIndex(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), Vector2cd(1,2)));
+    EXPECT_EQ(6, space.getIndex(Vector2i(1,2)));
+    EXPECT_EQ(6, HilbertSpace::getIndex(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), Vector2i(1,2)));
+}
+
+TEST_F(HilbertSpaceTest, CheckGetBasisVector) {
+    HilbertSpace space(dims);
+    
+    // lets try vector |12> that is equal to |1>¤|2>
+    Vector2i vec(1,2);
+    VectorXcd res(12);
+    res.setZero(); res[6] = 1;
+    
+    EXPECT_EQ(res, space.getBasisVector(vec));
 }
 
 }

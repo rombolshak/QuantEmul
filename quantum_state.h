@@ -54,7 +54,7 @@ public:
      */
     static QuantumState tensor(const QuantumState& first, const QuantumState& second);
     
-    QuantumState partialTrace(int index);
+    QuantumState partialTrace(int index) const;
     
     /**
      * Returns eigen values in vector of *real* numbers. Size of vector equals to the density matrix size

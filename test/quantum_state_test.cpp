@@ -120,3 +120,20 @@ TEST(QST, TestPartTrace) {
     EXPECT_ANY_THROW(tens.partialTrace(-1));
     EXPECT_ANY_THROW(tens.partialTrace(2));
 }
+
+TEST(QST, TestPartTrace2) {
+    HilbertSpace space(2);
+    
+    MatrixXcd stateMatr(4, 4);
+    stateMatr.setZero();
+    stateMatr(0,0) = stateMatr(0,3) = stateMatr(3,0) = stateMatr(3,3) = 0.5;
+    
+    MatrixXcd resMatr(2,2);
+    resMatr.setZero();
+    resMatr(0,0) = 0.5;
+    resMatr(1,1) = 0.5;
+    
+    QuantumState state(stateMatr, HilbertSpace::tensor(space, space));
+    EXPECT_EQ(QuantumState(resMatr, space), state.partialTrace(0));
+    EXPECT_EQ(QuantumState(resMatr, space), state.partialTrace(1));
+}

@@ -49,8 +49,8 @@ QuantumState QuantumState::tensor(const QuantumState& first, const QuantumState&
 {
     return QuantumState(KroneckerTensor::product(first._density, second._density), HilbertSpace::tensor(first._space, second._space));
 }
-
-QuantumState QuantumState::partialTrace(int index)
+#include <iostream>
+QuantumState QuantumState::partialTrace(int index) const
 {
     if (index < 0) throw std::invalid_argument("You cannot take partial trace on negative subsystem index");
     if (index >= _space.rank()) throw std::invalid_argument("This state have not such subsystem");
@@ -60,17 +60,17 @@ QuantumState QuantumState::partialTrace(int index)
     dims.erase(it);
     HilbertSpace newSpace(dims);
     
-    MatrixXcd res(dims.size(), dims.size());
+    MatrixXcd res(newSpace.totalDimension(), newSpace.totalDimension());
     res.setZero();
     
     for (int row = 0; row < _space.totalDimension(); ++row)
 	for (int col = 0; col < _space.totalDimension() / _space.dimension(index); ++col) {
 	    
-	    VectorXcd vecLeftIndex = _space.getVector(row);
-	    VectorXcd vecRightIndex = vecLeftIndex;
+	    VectorXi vecLeftIndex = _space.getVector(row);
+	    VectorXi vecRightIndex = vecLeftIndex;
 	    
-	    VectorXcd vecRightRed = newSpace.getVector(col);
-	    VectorXcd vecLeftRed = vecRightRed;
+	    VectorXi vecRightRed = newSpace.getVector(col);
+	    VectorXi vecLeftRed = vecRightRed;
 	    
 	    for (int i = 0; i < vecRightIndex.size(); ++i)
 		if (i < index)
@@ -83,10 +83,12 @@ QuantumState QuantumState::partialTrace(int index)
 		if (i < index)
 		    vecLeftRed[i] = vecLeftIndex[i];
 		else if (i > index)
-		    vecLeftRed[i] = vecLeftIndex[i+1];
+		    vecLeftRed[i-1] = vecLeftIndex[i];
 		else continue;
 		
-	    std::complex< double > coef = vecLeftIndex.transpose() * _density * vecRightIndex;
+	    std::complex< double > coef = _space.getBasisVector(vecLeftIndex).transpose() * _density * _space.getBasisVector(vecRightIndex);
+	    
+	    //std::cout << "res = " << std::endl << res << std::endl << "coef = " << coef << std::endl;
 	    
 	    res(newSpace.getIndex(vecLeftRed), newSpace.getIndex(vecRightRed)) += coef;
 	}
@@ -169,7 +171,7 @@ MatrixXcd QuantumState::eigenVectors() {
 
 bool QuantumState::operator==(const QuantumState& other) const
 {
-    return (_density == other._density) && (_space == other._space);
+    return (_density.isApprox(other._density)) && (_space == other._space);
 }
 
 bool QuantumState::operator!=(const QuantumState& other) const
