@@ -55,9 +55,43 @@ QuantumState QuantumState::partialTrace(int index)
     if (index < 0) throw std::invalid_argument("You cannot take partial trace on negative subsystem index");
     if (index >= _space.rank()) throw std::invalid_argument("This state have not such subsystem");
     
+    std::vector <uint> dims = _space.dimensions();
+    std::vector<uint>::iterator it = dims.begin() + index;
+    dims.erase(it);
+    HilbertSpace newSpace(dims);
     
+    MatrixXcd res(dims.size(), dims.size());
+    res.setZero();
     
-    return *this;
+    for (int row = 0; row < _space.totalDimension(); ++row)
+	for (int col = 0; col < _space.totalDimension() / _space.dimension(index); ++col) {
+	    
+	    VectorXcd vecLeftIndex = _space.getVector(row);
+	    VectorXcd vecRightIndex = vecLeftIndex;
+	    
+	    VectorXcd vecRightRed = newSpace.getVector(col);
+	    VectorXcd vecLeftRed = vecRightRed;
+	    
+	    for (int i = 0; i < vecRightIndex.size(); ++i)
+		if (i < index)
+		    vecRightIndex[i] = vecRightRed[i];
+		else if (i > index)
+		    vecRightIndex[i] = vecRightRed[i-1];
+		else vecRightIndex[i] = vecLeftIndex[index];
+		
+	    for (int i = 0; i < vecRightIndex.size(); ++i)
+		if (i < index)
+		    vecLeftRed[i] = vecLeftIndex[i];
+		else if (i > index)
+		    vecLeftRed[i] = vecLeftIndex[i+1];
+		else continue;
+		
+	    std::complex< double > coef = vecLeftIndex.transpose() * _density * vecRightIndex;
+	    
+	    res(newSpace.getIndex(vecLeftRed), newSpace.getIndex(vecRightRed)) += coef;
+	}
+    
+    return QuantumState(res, newSpace);
 }
 
 #ifndef Checks

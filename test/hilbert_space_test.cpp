@@ -87,4 +87,18 @@ TEST_F(HilbertSpaceTest, CheckTensor) {
     EXPECT_EQ(2, space.rank());
 }
 
+TEST_F(HilbertSpaceTest, CheckIndexToVector) {
+    HilbertSpace space(dims);
+    
+    EXPECT_EQ(Vector2cd(1, 2), space.getVector(6));
+    EXPECT_EQ(Vector2cd(1,2), HilbertSpace::getVector(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), 6));
+}
+
+TEST_F(HilbertSpaceTest, CheckVectorToIndex) {
+    HilbertSpace space(dims);
+    
+    EXPECT_EQ(6, space.getIndex(Vector2cd(1,2)));
+    EXPECT_EQ(6, HilbertSpace::getIndex(HilbertSpace::tensor(HilbertSpace(3), HilbertSpace(4)), Vector2cd(1,2)));
+}
+
 }

@@ -29,7 +29,9 @@
 
 #include <vector>
 #include <sys/types.h>
+#include "Eigen/Core"
 
+using namespace Eigen;
 /**
  * Class representing an instance of Hilbert space or tensor product of several spaces
  */
@@ -78,8 +80,21 @@ public:
      */
     void tensorWith(const HilbertSpace& second);
     
+    /**
+     * Returns vector with basis coefficients by index
+     */
+    VectorXcd getVector(int index);
+    static VectorXcd getVector(HilbertSpace space, int index);
+    
+    /**
+     * Returns index in full space by basis coefficients vector
+     */
+    int getIndex(VectorXcd vec);
+    static int getIndex(HilbertSpace space, VectorXcd vec);
+    
     bool operator==(const HilbertSpace& other) const;
     bool operator!=(const HilbertSpace& other) const;
+    std::vector<uint> dimensions();
 
 private:
     int _rank, _dim;

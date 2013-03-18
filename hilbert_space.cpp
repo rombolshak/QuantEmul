@@ -73,6 +73,42 @@ void HilbertSpace::tensorWith(const HilbertSpace& second)
     _dim *= second._dim;
 }
 
+VectorXcd HilbertSpace::getVector(int index)
+{
+    VectorXcd vec(_rank);
+    for (int i = _rank - 1; i >= 0; --i) {
+	vec[i] = index % _dimensions[i];
+	index = (int) floor(1.0 * index / _dimensions[i]);
+    }
+    return vec;
+}
+
+VectorXcd HilbertSpace::getVector(HilbertSpace space, int index)
+{
+    return space.getVector(index);
+}
+
+int HilbertSpace::getIndex(VectorXcd vec)
+{
+    if (vec.size() != _rank)
+	throw std::invalid_argument("Vector size must be equal to space dimension");
+    int index = (int)(vec[vec.size() - 1]).real();
+    int multiplier = _dimensions[_rank - 1];
+    for (int i = vec.size() - 2; i >= 0; --i) {
+	index += (int) vec[i].real() * multiplier;
+	multiplier *= _dimensions[i];
+    }
+	
+    return index;
+}
+
+int HilbertSpace::getIndex(HilbertSpace space, VectorXcd vec)
+{
+    return space.getIndex(vec);
+}
+
+
+
 bool HilbertSpace::operator==(const HilbertSpace& other) const
 {
     return _dimensions == other._dimensions;
@@ -96,6 +132,12 @@ int HilbertSpace::dimension(int index) const
     if (index >= _rank) throw out_of_range("This space is less than you think. There is no dimension with such big index, sorry");
     return _dimensions[index];
 }
+
+vector<uint> HilbertSpace::dimensions()
+{
+    return _dimensions;
+}
+
 
 int HilbertSpace::totalDimension() const
 {
