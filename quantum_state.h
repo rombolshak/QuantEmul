@@ -47,7 +47,7 @@ public:
     /**
      * Returns density matrix of current state
      */
-    MatrixXcd densityMatrix();
+    MatrixXcd densityMatrix() const;
     
     /**
      * Create new state that will be result of tensor product of 2 other states
@@ -59,17 +59,17 @@ public:
     /**
      * Returns eigen values in vector of *real* numbers. Size of vector equals to the density matrix size
      */
-    VectorXd eigenValues();
+    VectorXd eigenValues() const;
     
     /**
      * Returns matrix with eigen vectors as columns
      */
-    MatrixXcd eigenVectors();
+    MatrixXcd eigenVectors() const;
     
     /**
      * Show whether current state is pure or mixed
      */
-    bool isPure();
+    bool isPure() const;
     
     /**
      * Sets a new density matrix. Matrix should be square, self-adjoint, positive semi-definite, of trace one. Use it wisely.
@@ -81,7 +81,7 @@ public:
     /**
      * Returns space in which this state exists
      */
-    HilbertSpace space();    
+    HilbertSpace space() const;    
     
     bool operator==(const QuantumState& other) const;
     bool operator!=(const QuantumState& other) const;

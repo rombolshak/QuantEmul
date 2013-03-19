@@ -122,3 +122,32 @@ TEST(MeasurementTest, TestConstructWithObservable) {
     EXPECT_EQ(0, measure.probabilities(state)["1"]);
     EXPECT_EQ("0", measure.performOn(&state));
 }
+
+TEST(MeasurementTest, TestPerformingOnSubsystem) {
+    Matrix4cd epr;
+    epr << 0.5,0,0,0.5, 0,0,0,0, 0,0,0,0, 0.5,0,0,0.5;
+    HilbertSpace space = HilbertSpace::tensor(HilbertSpace(2), HilbertSpace(2));
+    
+    Measurement measure = Proector(HilbertSpace(2));
+    QuantumState state(epr, space);
+    
+    EXPECT_EQ(0.5, measure.probabilities(state, 0)["|0><0|"]);
+    EXPECT_EQ(0.5, measure.probabilities(state, 1)["|1><1|"]);
+    
+    if (measure.performOn(&state, 0) == "|0><0|")
+    {
+	Matrix4cd pr; pr.setZero(); pr(0,0) = 1;
+	Matrix2cd prPart; prPart << 1,0,0,0;
+	
+	EXPECT_EQ(true, pr.isApprox(state.densityMatrix())); // state |00>
+	EXPECT_EQ(true, prPart.isApprox(state.partialTrace(0).densityMatrix())); // second qubit in |0>
+    }
+    else
+    {
+	Matrix4cd pr; pr.setZero(); pr(3,3) = 1;
+	Matrix2cd prPart; prPart << 0,0,0,1;
+	
+	EXPECT_EQ(true, pr.isApprox(state.densityMatrix())); // state |11>
+	EXPECT_EQ(true, prPart.isApprox(state.partialTrace(0).densityMatrix())); // second qubit in |1>
+    }
+}

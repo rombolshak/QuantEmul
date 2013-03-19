@@ -76,7 +76,7 @@ void HilbertSpace::tensorWith(const HilbertSpace& second)
 
 #endif
 
-#ifndef Ket-bra
+#ifndef Ket_bra
 
 VectorXi HilbertSpace::getVector(int index) const
 {

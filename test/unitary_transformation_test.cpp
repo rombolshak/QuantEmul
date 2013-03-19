@@ -79,7 +79,7 @@ TEST(UnitaryTransformationTest, TestConstructWithWrongSpace) {
     EXPECT_ANY_THROW(UnitaryTransformation(matr, space));
 }
 
-TEST(UnitaryTransformationTest, TestApplyingAdamarTransform) {
+TEST(UnitaryTransformationTest, TestApplyingHadamardTransform) {
     MatrixXcd transformMatr(2,2), stateMatr(2,2), resMatr(2,2);
     transformMatr << 1,1,1,-1; transformMatr /= sqrt(2);
     stateMatr.setConstant(0.5);

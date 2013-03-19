@@ -141,7 +141,7 @@ void QuantumState::_checkSpaceDimension(MatrixXcd matr, HilbertSpace space) {
 
 #endif
 
-bool QuantumState::isPure() {
+bool QuantumState::isPure() const {
     MatrixXcd square = _density * _density;
     return abs(square.trace() - std::complex< double >(1, 0)) < 1.0e-15;
 }
@@ -156,19 +156,19 @@ void QuantumState::setMatrix(MatrixXcd matr) {
 
 #ifndef Getters
 
-HilbertSpace QuantumState::space() {
+HilbertSpace QuantumState::space() const {
     return _space;
 }
 
-MatrixXcd QuantumState::densityMatrix() {
+MatrixXcd QuantumState::densityMatrix() const {
     return _density;
 }
 
-VectorXd QuantumState::eigenValues() {
+VectorXd QuantumState::eigenValues() const {
     return _eigenValues;
 }
 
-MatrixXcd QuantumState::eigenVectors() {
+MatrixXcd QuantumState::eigenVectors() const {
     return _eigenVectors;
 }
 

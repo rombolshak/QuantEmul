@@ -26,6 +26,7 @@
 
 #include "measurement.h"
 #include "Eigen/Eigenvalues"
+#include "kronecker_tensor.h"
 #include <stdexcept>
 #include <string>
 
@@ -142,9 +143,9 @@ bool Measurement::_checkOperatorsArePositive()
     return true;
 }
 
-void Measurement::_checkSpacesDimensionsMatches(HilbertSpace space)
+void Measurement::_checkSpacesDimensionsMatches(HilbertSpace space, int subsystem)
 {
-    if (_operators[0].cols() != space.totalDimension())
+    if (_operators[0].cols() != (subsystem == -1 ? space.totalDimension() : space.dimension(subsystem)))
 	throw std::invalid_argument("State space dimension does not match operators dimension");
 }
 
@@ -152,25 +153,49 @@ void Measurement::_checkSpacesDimensionsMatches(HilbertSpace space)
 
 #ifndef Performing
 
-std::map< std::string, double > Measurement::probabilities(QuantumState state)
+MatrixXcd Measurement::_getIdentityMatrix(int dimension)
 {
-    if (!_valid) 
-	throw std::runtime_error("You cannot test probabilities because " + _err);
-    _checkSpacesDimensionsMatches(state.space());
+    MatrixXcd i(dimension, dimension);
+    i.setIdentity();
+    return i;
+}
+
+MatrixXcd Measurement::_getMeasurementMatrix(int subsystem, int num, const HilbertSpace& space)
+{
+    if (subsystem == -1)
+	return _operators[num];
     
-    std::map< std::string, double > res;
-    for (int i = 0; i < _operators.size(); ++i)
-	res[_labels[i]] = (state.densityMatrix() * _operators[i]).trace().real();
+    MatrixXcd res(1,1);
+    res(0,0) = 1;
+    for (int i = 0; i < space.rank(); ++i)
+	if (i == subsystem)
+	    res = KroneckerTensor::product(res, _operators[num]);
+	else res = KroneckerTensor::product(res, _getIdentityMatrix(space.dimension(i)));
+    
     return res;
 }
 
-std::string Measurement::performOn(QuantumState* state)
+std::map< std::string, double > Measurement::probabilities(const QuantumState& state, int subsystem)
+{
+    if (!_valid) 
+	throw std::runtime_error("You cannot test probabilities because " + _err);
+    _checkSpacesDimensionsMatches(state.space(), subsystem);
+    
+    std::map< std::string, double > res;
+    for (int i = 0; i < _operators.size(); ++i) {
+	MatrixXcd measureMatr = _getMeasurementMatrix(subsystem, i, state.space());
+	res[_labels[i]] = (state.densityMatrix() * measureMatr).trace().real();
+    }
+    return res;
+}
+
+std::string Measurement::performOn(QuantumState* state, int subsystem)
 {
     if (!_valid) 
 	throw std::runtime_error("You cannot perform this measurement because " + _err);
-    _checkSpacesDimensionsMatches(state->space());
+    _checkSpacesDimensionsMatches(state->space(), subsystem);
     
-    std::map< std::string, double > probs = probabilities(*state);
+    std::map< std::string, double > probs = probabilities(*state, subsystem);
     
     srand(time(NULL));
     double r = (double) rand() / RAND_MAX;
@@ -185,7 +210,8 @@ std::string Measurement::performOn(QuantumState* state)
     // lets perform changing state
     // first, we need to compute square root of operator
     
-    SelfAdjointEigenSolver<MatrixXcd> solver(_operators[outcomeNum]);
+    MatrixXcd measureMatr = _getMeasurementMatrix(subsystem, outcomeNum, state->space());
+    SelfAdjointEigenSolver<MatrixXcd> solver(measureMatr);
     MatrixXcd root = solver.operatorSqrt();
     
     MatrixXcd newMatrix = (root * state->densityMatrix() * root) / probs[_labels[outcomeNum]];
@@ -194,9 +220,37 @@ std::string Measurement::performOn(QuantumState* state)
     return _labels[outcomeNum];
 }
 
+std::string Measurement::performOnSubsystem(QuantumState* state, int subsystem)
+{
+    return performOn(state, subsystem);
+}
+
+
 #endif
 
 #ifndef Getters
+
+
+Proector::Proector(HilbertSpace space)
+{
+    for (int i = 0; i < space.totalDimension(); ++i) {
+	VectorXi toLabel = space.getVector(i);
+	VectorXcd op = space.getBasisVector(toLabel);
+	addOperator(op * op.transpose(), _vecToLabel(toLabel));
+    }
+}
+
+std::string Proector::_vecToLabel(VectorXi vec)
+{
+    std::string v = "";
+    for (int i = 0; i < vec.size(); ++i) {
+	if (i != 0) v += ",";
+	v += i_to_string(vec[i]);
+    }
+    return "|" + v + "><" + v + "|";
+}
+
+
 
 bool Measurement::isValid()
 {

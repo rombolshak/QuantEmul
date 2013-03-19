@@ -86,16 +86,20 @@ public:
     /**
      * Returns probabilities of each outcome possible in this measurement if it was applied to the specified state
      * @param state Quantum state which space matches operators dimension
+     * @param subsystem -1 if measurement assigned to full state, or subsystem index
      * @return Map where keys are outcome labels and values are probabilities of this outcomes, from 0 to 1, inclusive
      */
-    std::map<std::string, double> probabilities(QuantumState state);
+    std::map<std::string, double> probabilities(const QuantumState& state, int subsystem = -1);
     
     /**
      * Perform this measurement on the specified state
      * @param state Quantum state to perform measurement on. Be sure about space matching
+     * @param subsystem -1 if measurement assigned to full state, or subsystem index
      * @return Label of outcome which occured. Notice that state has changed
      */
-    std::string performOn(QuantumState* state);
+    std::string performOn(QuantumState* state, int subsystem = -1);
+    
+    std::string performOnSubsystem(QuantumState* state, int subsystem);
 
     /**
      * Full operator set of this measurement
@@ -118,7 +122,17 @@ private:
     bool _checkOperatorsSumEqualToIdentity();
     bool _checkOperatorsAreHermit();
     bool _checkOperatorsArePositive();
-    void _checkSpacesDimensionsMatches(HilbertSpace space);
+    void _checkSpacesDimensionsMatches(HilbertSpace space, int subsystem);
+    MatrixXcd _getMeasurementMatrix(int subsystem, int i, const HilbertSpace& space);
+    MatrixXcd _getIdentityMatrix(int dimension);
 };
 
+
+class Proector : public Measurement
+{
+public:
+    Proector(HilbertSpace space);
+private:
+    std::string _vecToLabel(VectorXi vec);
+};
 #endif // MEASUREMENT_H
