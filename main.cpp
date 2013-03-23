@@ -1,10 +1,6 @@
-#include <gtest/gtest.h>
-
-TEST(SomeTest, CheckTesting) {
-    EXPECT_EQ(1 + 1, 2);
-}
-
+#include "controllers/index_controller.h"
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    
+    (IndexController::Instance()).run();
+    return 0;
 }

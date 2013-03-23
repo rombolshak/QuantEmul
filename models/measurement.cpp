@@ -25,7 +25,7 @@
 
 
 #include "measurement.h"
-#include "Eigen/Eigenvalues"
+#include "../Eigen/Eigenvalues"
 #include "kronecker_tensor.h"
 #include <stdexcept>
 #include <string>

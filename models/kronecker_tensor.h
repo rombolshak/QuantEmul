@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -24,37 +24,16 @@
 */
 
 
-#ifndef CONTROLLEDUGATE_H
-#define CONTROLLEDUGATE_H
+#ifndef KRONECKER_TENSOR_H
+#define KRONECKER_TENSOR_H
 
-#include <../../unitary_transformation.h>
+#include "../Eigen/Core"
+using namespace Eigen;
 
-/**
- * Class representing Controlled U gate. This is 2 qubit transform. When the first is equal to 1, apply transform U to the second
- */
-class ControlledUGate : public UnitaryTransformation
+class KroneckerTensor
 {
 public:
-    /**
-     * Construct controlled transform
-     * @param transform 1-cubit transformation. Be sure to provide unitary matrix
-     */
-    ControlledUGate(Matrix2cd transform) {init(transform);}
-protected:
-    ControlledUGate(){}
-    void init(Matrix2cd transform);
+    static MatrixXcd product(MatrixXcd first, MatrixXcd second);
 };
 
-/**
- * Class representing the CNOT gate: apply NOT the the second qubit if the first equal to 1
- */
-class CNOTGate : public ControlledUGate
-{
-public:
-    CNOTGate() {
-	Matrix2cd matr; matr << 0,1,1,0;
-	init(matr);
-    }
-};
-
-#endif // CONTROLLEDUGATE_H
+#endif // KRONECKER_TENSOR_H

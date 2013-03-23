@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2013 Роман <rombolshak@russia.ru>
+    Copyright (c) 2013 Роман Большаков <rombolshak@russia.ru>
 
     Permission is hereby granted, free of charge, to any person
     obtaining a copy of this software and associated documentation
@@ -24,16 +24,13 @@
 */
 
 
-#ifndef KRONECKER_TENSOR_H
-#define KRONECKER_TENSOR_H
+#ifndef INDEX_VIEW_H
+#define INDEX_VIEW_H
 
-#include "Eigen/Core"
-using namespace Eigen;
-
-class KroneckerTensor
+class IndexView
 {
 public:
-    static MatrixXcd product(MatrixXcd first, MatrixXcd second);
+    static void render();
 };
 
-#endif // KRONECKER_TENSOR_H
+#endif // INDEX_VIEW_H

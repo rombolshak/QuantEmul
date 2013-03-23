@@ -27,7 +27,7 @@
 #ifndef MEASUREMENT_H
 #define MEASUREMENT_H
 
-#include "Eigen/Core"
+#include "../Eigen/Core"
 #include "quantum_state.h"
 #include <vector>
 #include <map>

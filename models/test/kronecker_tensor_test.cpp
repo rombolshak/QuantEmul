@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <../kronecker_tensor.h>
+#include "../kronecker_tensor.h"
 
 TEST(KroneckerTensorTest, TestProduct) {
     Matrix2cd first, second;

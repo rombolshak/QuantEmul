@@ -29,7 +29,7 @@
 
 #include <vector>
 #include <sys/types.h>
-#include "Eigen/Core"
+#include "../Eigen/Core"
 
 using namespace Eigen;
 /**

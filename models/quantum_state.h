@@ -26,7 +26,7 @@
 
 #ifndef QUANTUMSTATE_H
 #define QUANTUMSTATE_H
-#include "Eigen/Dense"
+#include "../Eigen/Dense"
 #include "hilbert_space.h"
 
 using namespace Eigen;

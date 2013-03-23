@@ -24,18 +24,11 @@
 */
 
 
-#ifndef PHASESHIFTGATE_H
-#define PHASESHIFTGATE_H
+#include "index_view.h"
+#include <iostream>
+using namespace std;
 
-#include <../../unitary_transformation.h>
-
-/**
- * Represents gate that leave |0> unchanged and map |1> to e^(i*teta)|1>
- */
-class PhaseShiftGate : public UnitaryTransformation
+void IndexView::render()
 {
-public:
-    PhaseShiftGate(double teta);
-};
-
-#endif // PHASESHIFTGATE_H
+    cout << "Hello, world" << endl;
+}

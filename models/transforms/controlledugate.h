@@ -24,25 +24,37 @@
 */
 
 
-#ifndef PAULIGATE_H
-#define PAULIGATE_H
+#ifndef CONTROLLEDUGATE_H
+#define CONTROLLEDUGATE_H
 
-#include <../../unitary_transformation.h>
+#include "../unitary_transformation.h"
 
 /**
- * Represents three Pauli gates. Pauli-X is NOT gate. Pauli-Y and Pauli-Z are rotations around Y and Z axis respectively
+ * Class representing Controlled U gate. This is 2 qubit transform. When the first is equal to 1, apply transform U to the second
  */
-class PauliGate : public UnitaryTransformation
+class ControlledUGate : public UnitaryTransformation
 {
 public:
-    enum Version {X, Y, Z} version;
-    PauliGate(Version ver);
+    /**
+     * Construct controlled transform
+     * @param transform 1-cubit transformation. Be sure to provide unitary matrix
+     */
+    ControlledUGate(Matrix2cd transform) {init(transform);}
+protected:
+    ControlledUGate(){}
+    void init(Matrix2cd transform);
 };
 
-class NOTGate : public PauliGate
+/**
+ * Class representing the CNOT gate: apply NOT the the second qubit if the first equal to 1
+ */
+class CNOTGate : public ControlledUGate
 {
 public:
-    NOTGate() : PauliGate(X) {}
+    CNOTGate() {
+	Matrix2cd matr; matr << 0,1,1,0;
+	init(matr);
+    }
 };
 
-#endif // PAULIGATE_H
+#endif // CONTROLLEDUGATE_H

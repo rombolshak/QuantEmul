@@ -25,7 +25,7 @@
 
 
 #include "unitary_transformation.h"
-#include "Eigen/LU"
+#include "../Eigen/LU"
 #include <stdexcept>
 
 #ifndef Constructors

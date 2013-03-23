@@ -11,17 +11,18 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 #find_package(Eigen3 REQUIRED)
 #include_directories(${EIGEN3_INCLUDE_DIR})
 
-add_executable(quantemul kronecker_tensor.cpp measurement.cpp unitary_transformation.cpp quantum_state.cpp hilbert_space.cpp main.cpp 
-	    transforms/toffoligate.cpp transforms/controlledugate.cpp transforms/swapgate.cpp transforms/phaseshiftgate.cpp transforms/pauligate.cpp transforms/hadamardgate.cpp 	    
-	    test/test.cpp test/kronecker_tensor_test.cpp test/hilbert_space_test.cpp test/quantum_state_test.cpp test/unitary_transformation_test.cpp test/transformationstest.cpp test/measurementtest.cpp)
-add_subdirectory(test)
-target_link_libraries(quantemul gtest gtest_main)
+add_executable(qtest models/kronecker_tensor.cpp models/measurement.cpp models/unitary_transformation.cpp models/quantum_state.cpp models/hilbert_space.cpp test_main.cpp 
+	    models/transforms/toffoligate.cpp models/transforms/controlledugate.cpp models/transforms/swapgate.cpp models/transforms/phaseshiftgate.cpp models/transforms/pauligate.cpp models/transforms/hadamardgate.cpp 	    
+	    models/test/test.cpp models/test/kronecker_tensor_test.cpp models/test/hilbert_space_test.cpp models/test/quantum_state_test.cpp models/test/unitary_transformation_test.cpp models/test/transformationstest.cpp models/test/measurementtest.cpp)
+add_subdirectory(models/test)
+target_link_libraries(qtest gtest gtest_main)
+
+add_executable(quantemul views/index_view.cpp controllers/index_controller.cpp models/kronecker_tensor.cpp models/measurement.cpp models/unitary_transformation.cpp models/quantum_state.cpp models/hilbert_space.cpp main.cpp 
+models/transforms/toffoligate.cpp models/transforms/controlledugate.cpp models/transforms/swapgate.cpp models/transforms/phaseshiftgate.cpp models/transforms/pauligate.cpp models/transforms/hadamardgate.cpp)
 
 add_test(
-    NAME quantemul
-    COMMAND quantemul
+    NAME qtest
+    COMMAND qtest
 )
 
-install(TARGETS quantemul RUNTIME DESTINATION bin)
-
-add_subdirectory(transforms)
+#install(TARGETS quantemul RUNTIME DESTINATION bin)

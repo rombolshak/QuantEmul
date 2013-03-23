@@ -24,17 +24,22 @@
 */
 
 
-#ifndef HADAMARDGATE_H
-#define HADAMARDGATE_H
-#include <../../unitary_transformation.h>
+#ifndef INDEX_CONTROLLER_H
+#define INDEX_CONTROLLER_H
 
-/**
- * Represents the Hadamard gate: transform |0> to |0> + |1> and |1> to |0> - |1>
- */
-class HadamardGate : public UnitaryTransformation
+class IndexController
 {
 public:
-    HadamardGate();
+    static const IndexController& Instance()
+    {
+	static IndexController theSingleInstance;
+	return theSingleInstance;
+    }
+    void run() const;
+private:
+    IndexController(){};
+    IndexController(const IndexController& root);
+    IndexController& operator=(const IndexController&);
 };
 
-#endif // HADAMARDGATE_H
+#endif // INDEX_CONTROLLER_H

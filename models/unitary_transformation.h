@@ -27,7 +27,7 @@
 #ifndef UNITARYTRANSFORMATION_H
 #define UNITARYTRANSFORMATION_H
 
-#include "Eigen/Dense"
+#include "../Eigen/Dense"
 #include "hilbert_space.h"
 #include "quantum_state.h"
 
