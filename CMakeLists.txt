@@ -17,7 +17,7 @@ add_executable(qtest models/kronecker_tensor.cpp models/measurement.cpp models/u
 add_subdirectory(models/test)
 target_link_libraries(qtest gtest gtest_main)
 
-add_executable(quantemul views/index_view.cpp controllers/index_controller.cpp models/kronecker_tensor.cpp models/measurement.cpp models/unitary_transformation.cpp models/quantum_state.cpp models/hilbert_space.cpp main.cpp 
+add_executable(quantemul models/kronecker_tensor.cpp models/measurement.cpp models/unitary_transformation.cpp models/quantum_state.cpp models/hilbert_space.cpp main.cpp 
 models/transforms/toffoligate.cpp models/transforms/controlledugate.cpp models/transforms/swapgate.cpp models/transforms/phaseshiftgate.cpp models/transforms/pauligate.cpp models/transforms/hadamardgate.cpp)
 
 add_test(
