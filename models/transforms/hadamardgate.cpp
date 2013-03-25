@@ -26,11 +26,12 @@
 
 #include "hadamardgate.h"
 
-HadamardGate::HadamardGate() : UnitaryTransformation()
+HadamardGate::HadamardGate(int subsystem, HilbertSpace space) : UnitaryTransformation()
 {
 Matrix2cd matr;
 matr << 1, 1, 1, -1;
 matr /= sqrt(2);
 _matrix = matr;
-_space = HilbertSpace(2);
+_space = space;
+_continueConstruct(subsystem);
 }

@@ -153,26 +153,12 @@ void Measurement::_checkSpacesDimensionsMatches(HilbertSpace space, int subsyste
 
 #ifndef Performing
 
-MatrixXcd Measurement::_getIdentityMatrix(int dimension)
-{
-    MatrixXcd i(dimension, dimension);
-    i.setIdentity();
-    return i;
-}
-
 MatrixXcd Measurement::_getMeasurementMatrix(int subsystem, int num, const HilbertSpace& space)
 {
     if (subsystem == -1)
 	return _operators[num];
     
-    MatrixXcd res(1,1);
-    res(0,0) = 1;
-    for (int i = 0; i < space.rank(); ++i)
-	if (i == subsystem)
-	    res = KroneckerTensor::product(res, _operators[num]);
-	else res = KroneckerTensor::product(res, _getIdentityMatrix(space.dimension(i)));
-    
-    return res;
+    return KroneckerTensor::expand(_operators[num], subsystem, space.dimensions());
 }
 
 std::map< std::string, double > Measurement::probabilities(const QuantumState& state, int subsystem)
@@ -197,7 +183,7 @@ std::string Measurement::performOn(QuantumState* state, int subsystem)
     
     std::map< std::string, double > probs = probabilities(*state, subsystem);
     
-    srand(time(NULL));
+    //srand(time(NULL));
     double r = (double) rand() / RAND_MAX;
     
     int outcomeNum = 0;

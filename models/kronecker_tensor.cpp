@@ -26,7 +26,7 @@
 
 #include "kronecker_tensor.h"
 
-MatrixXcd KroneckerTensor::product(MatrixXcd a, MatrixXcd b)
+MatrixXcd KroneckerTensor::product(const MatrixXcd& a, const MatrixXcd& b)
 {
     MatrixXcd res(a.rows() * b.rows(), a.cols() * b.cols());
     
@@ -36,4 +36,22 @@ MatrixXcd KroneckerTensor::product(MatrixXcd a, MatrixXcd b)
 		for (int l = 0; l < b.cols(); ++l)
 		    res(i * b.rows() + k, j * b.cols() + l) = a(i, j) * b(k, l);
     return res;
+}
+
+MatrixXcd KroneckerTensor::expand(const MatrixXcd& initial, int index, const std::vector< uint >& dimensions)
+{
+    MatrixXcd res(1,1);
+    res(0,0) = 1;
+    for (int i = 0; i < dimensions.size(); ++i)
+	if (i == index)
+	    res = KroneckerTensor::product(res, initial);
+	else res = KroneckerTensor::product(res, getIdentityMatrix(dimensions[i]));
+    return res;
+}
+
+MatrixXcd KroneckerTensor::getIdentityMatrix(uint dimension)
+{
+    MatrixXcd i(dimension, dimension);
+    i.setIdentity();
+    return i;
 }

@@ -28,12 +28,16 @@
 #define KRONECKER_TENSOR_H
 
 #include "../Eigen/Core"
+#include <vector>
 using namespace Eigen;
 
 class KroneckerTensor
 {
 public:
-    static MatrixXcd product(MatrixXcd first, MatrixXcd second);
+    static MatrixXcd product(const MatrixXcd& a, const MatrixXcd& b);
+    static MatrixXcd expand(const MatrixXcd& initial, int index, const std::vector< uint >& dimensions);
+    static MatrixXcd getIdentityMatrix(uint dimension);
+private:
 };
 
 #endif // KRONECKER_TENSOR_H

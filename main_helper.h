@@ -24,17 +24,28 @@
 */
 
 
-#ifndef HADAMARDGATE_H
-#define HADAMARDGATE_H
-#include "../unitary_transformation.h"
+#ifndef MAIN_HELPER_H
+#define MAIN_HELPER_H
 
-/**
- * Represents the Hadamard gate: transform |0> to |0> + |1> and |1> to |0> - |1>
- */
-class HadamardGate : public UnitaryTransformation
+#include <iostream>
+#include "models/quantum_state.h"
+using namespace std;
+
+class MainHelper
 {
 public:
-    HadamardGate(int subsystem = 0, HilbertSpace space = HilbertSpace(2));
+    MainHelper();
+    void run();
+private:    
+    void printWelcome();
+    int askDimension();
+    QuantumState* createInitialState(int n);
+    int askChoice();
+    void prepareState(int choice);
+    vector<int> askSubsystems();
+    vector<string> performMeasurementsOn(const std::vector< int >& subsystems);
+    
+    QuantumState *state;
 };
 
-#endif // HADAMARDGATE_H
+#endif // MAIN_HELPER_H

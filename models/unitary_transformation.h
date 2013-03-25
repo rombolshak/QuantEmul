@@ -45,14 +45,14 @@ public:
      * @param newBasis Basis after transform
      * @param space Hilbert space in which transform can be applied
      */
-    UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space);
+    UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space, int subsystem = -1);
     
     /**
      * Construct new transform by the unirary matrix
      * @param matrix Unitary matrix of transform
      * @param space Hilbert space in which transform can be applied
      */
-    UnitaryTransformation(MatrixXcd matrix, HilbertSpace space);
+    UnitaryTransformation(MatrixXcd matrix, HilbertSpace space, int subsystem = -1);
     
     /**
      * Returns unirary matrix of the transform
@@ -75,6 +75,7 @@ protected:
      * Empty constructor. Assume to be called only in derived class and derived class MUST set _matrix and _space variables
      */
     UnitaryTransformation();
+    void _continueConstruct(int subsystem);
     MatrixXcd _matrix;
     HilbertSpace _space;
 private:
@@ -82,8 +83,7 @@ private:
     void _checkMatricesHaveTheSameSize(MatrixXcd oldBasis, MatrixXcd newBasis);
     void _checkMatrixIsSquare(MatrixXcd matr);
     void _checkMatrixIsUnitary(MatrixXcd matrix);
-    void _continueConstruct();
-    void _checkSpace();
+    void _checkSpace(int subsystem);
 };
 
 #endif // UNITARYTRANSFORMATION_H

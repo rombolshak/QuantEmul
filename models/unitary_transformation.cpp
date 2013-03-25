@@ -25,6 +25,7 @@
 
 
 #include "unitary_transformation.h"
+#include "kronecker_tensor.h"
 #include "../Eigen/LU"
 #include <stdexcept>
 
@@ -34,7 +35,7 @@ UnitaryTransformation::UnitaryTransformation()
     
 }
 
-UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space)
+UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBasis, HilbertSpace space, int subsystem)
 {
     _checkMatricesAreSquare(oldBasis, newBasis);
     _checkMatricesHaveTheSameSize(oldBasis, newBasis);
@@ -45,16 +46,16 @@ UnitaryTransformation::UnitaryTransformation(MatrixXcd oldBasis, MatrixXcd newBa
     }
     _matrix = oldBasis.inverse() * newBasis;
     _space = space;
-    _continueConstruct();
+    _continueConstruct(subsystem);
 }
 
-UnitaryTransformation::UnitaryTransformation(MatrixXcd matrix, HilbertSpace space)
+UnitaryTransformation::UnitaryTransformation(MatrixXcd matrix, HilbertSpace space, int subsystem)
 {
     _checkMatrixIsSquare(matrix);
     _checkMatrixIsUnitary(matrix);
     _matrix = matrix;
     _space = space;
-    _continueConstruct();
+    _continueConstruct(subsystem);
 }
 
 #endif
@@ -88,14 +89,19 @@ void UnitaryTransformation::_checkMatrixIsUnitary(MatrixXcd matrix)
 	throw std::invalid_argument("Your matrix must be unitary (U* * U = I)");
 }
 
-void UnitaryTransformation::_continueConstruct()
+void UnitaryTransformation::_continueConstruct(int subsystem)
 {
-    _checkSpace();
+    if ((subsystem < -1) || (subsystem >= _space.rank()))
+	throw std::invalid_argument("Index of subsystem is outside of space bounds");
+    _checkSpace(subsystem);
+    if (subsystem != -1) {
+	_matrix = KroneckerTensor::expand(_matrix, subsystem, _space.dimensions());
+    }
 }
 
-void UnitaryTransformation::_checkSpace()
+void UnitaryTransformation::_checkSpace(int subsystem)
 {
-    if (_space.totalDimension() != _matrix.cols())
+    if ((subsystem == -1 ? _space.totalDimension() : _space.dimension(subsystem)) != _matrix.cols())
 	throw std::invalid_argument("Incorrect space was passed to the transformation");
 }
 
