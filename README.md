@@ -23,7 +23,7 @@ You'll need CMake to compile this project properly
 5. make
 6. ./quantemul
 
-Or if you wanna to run test:
+Or if you wanna run test:
 
 7. ./qtest
 
